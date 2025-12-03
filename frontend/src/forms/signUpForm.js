@@ -1,0 +1,113 @@
+import { useState } from 'react';
+import { useFetch } from '../hooks/fetch';
+import { useModal } from '../hooks/modalProvider';
+import { setUser } from '../components/Utils';
+import LoginForm from './loginForm';
+
+
+const SignUpForm = () => {
+    const { executeFetch, error } = useFetch();
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const { setModalContent, setModalTitle } = useModal();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        let postData = {mail: email, username: username, password: password}
+        executeFetch('post', 'account/signup', postData).then(
+            (res) => {setUser(res)}
+        )
+    };
+
+    const setLoginForm = () => {
+        setModalTitle('Авторизация');
+        setModalContent(
+            <LoginForm/>
+        );
+    }
+
+    return (
+        <form onSubmit={handleSubmit} className="flex flex-col items-center">
+            {error && <div className="text-red-500">{error}</div>}
+            <div className="flex flex-col w-full gap-3 mb-8">
+                <span>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                        Электронная почта
+                    </label>
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="mail@example.com"
+                        autocomplete="username"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="p-3 border w-[100%] border-gray-300 
+                            rounded-lg shadow-sm transition-all duration-200
+                            focus:border-[var(--color-primary-blue)] focus:ring-2 
+                            focus:ring-[var(--color-primary-blue)] focus:ring-opacity-50 
+                            focus:outline-none"
+                    />
+                </span>
+                <span>
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                        Юзернейм
+                    </label>
+                    <input
+                        id="username"
+                        type="username"
+                        placeholder="Никнейм"
+                        autocomplete="-"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className="p-3 border w-[100%] border-gray-300 
+                            rounded-lg shadow-sm transition-all duration-200
+                            focus:border-[var(--color-primary-blue)] focus:ring-2 
+                            focus:ring-[var(--color-primary-blue)] focus:ring-opacity-50 
+                            focus:outline-none"
+                    />
+                </span>
+                <span>
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                        Пароль
+                    </label>
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Пароль"
+                        autocomplete="current-password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="p-3 border w-[100%] border-gray-300 
+                            rounded-lg shadow-sm transition-all duration-200
+                            focus:border-[var(--color-primary-blue)] focus:ring-2 
+                            focus:ring-[var(--color-primary-blue)] focus:ring-opacity-50 
+                            focus:outline-none"
+                    />
+                </span>
+            </div>
+
+            {/* <div className='flex flex-col m-5'>
+                <span>Параметры регистрации</span>
+            </div> */}
+
+            <button
+                type="submit" id='main-btn'
+                className="bg-[rgba(39,123,207,1)] text-white font-semibold 
+                py-3 px-8 rounded-full shadow-lg w-[70%] transition-all duration-200
+                ease-in-out hover:bg-[rgb(55,140,223)] hover:shadow-md mb-4"
+            >
+                Зарегистрироваться
+            </button>
+            
+            <span
+            className="text-sm text-[var(--color-primary-blue)] cursor-pointer p-0"
+            onClick={setLoginForm}>
+                Есть аккаунт? Войти
+            </span>
+        </form>
+    )
+}
+
+export default SignUpForm

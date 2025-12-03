@@ -1,0 +1,15 @@
+# front
+node_modules/
+.env
+.env.local
+.DS_Store
+yarn.lock
+package-lock.json
+# backend
+__pycache__/
+*.pyc
+.python-version
+venv/
+.idea/
+.vscode/
+backend/config.env

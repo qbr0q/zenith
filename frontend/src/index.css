@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  padding-top: 5%;
+  margin: 0;
+  background-color: rgb(250, 250, 250);
+}
+
+:root {
+  --color-primary-blue: #3b82f6; 
+}
