@@ -44,7 +44,7 @@ class UserInfo(SQLModel, table=True):
 class PostLike(SQLModel, table=True):
     __tablename__ = "PostLike"
     id: Optional[int] = Field(default=None, primary_key=True)
-    post_id: Optional[int] = Field(default=None, foreign_key="Post.id", unique=True)
+    post_id: Optional[int] = Field(default=None, foreign_key="Post.id")
     user_id: int
     is_removed: bool = Field(default=False)
 
