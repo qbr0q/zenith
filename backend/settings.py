@@ -16,3 +16,9 @@ config.JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
 security = AuthX(config=config)
 
 allow_origins = ["http://localhost:3000"]
+
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+BLOCK_TIMEOUT = 1
+REDIS_QUEUE = os.getenv('REDIS_QUEUE', 'action_queue')
+

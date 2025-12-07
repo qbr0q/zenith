@@ -1,15 +1,20 @@
-import PointsMenu from './Menu'
-import SocialActions from './socialActions'
 import { useFetch } from '../../hooks/fetch';
 import { useState, useEffect } from 'react';
+import { getUser } from '../Utils'
+import PointsMenu from './Menu'
+import SocialActions from './socialActions'
+import TextParser from '../textParser'
+
 
 const Post = () => {
     const { executeFetch, error, loading } = useFetch();
     const [posts, setPosts] = useState([]);
+    const user = getUser()
     
     useEffect(() => {
         const fetchPosts = async () => {
-            const data = await executeFetch('get', 'post/last_posts');
+            const url_userId = user ? `?user_id=${user.id}` : ''
+            const data = await executeFetch('get', `post/last_posts/${url_userId}`);
             setPosts(data);
         };
         
@@ -21,10 +26,10 @@ const Post = () => {
     }
 
     if (error) {
-        return <div className="text-red-500">Ошибка: {error.message}</div>;
+        return <div className="text-red-500">Ошибка: {error}</div>;
     }
 
-    return <div className="bg-white  rounded-xl p-6 border" key="0">
+    return <div className="bg-white rounded-xl p-6 border" key="0">
         {posts.map(post => (
             <div className="flex flex-col gap-4 p-8">
                 <div className="flex items-center justify-between">
@@ -39,7 +44,7 @@ const Post = () => {
                     </div>
                     <PointsMenu/>
                 </div>
-                <span>{post.text}</span>
+                <TextParser>{post.text}</TextParser>
                 <SocialActions post={post}/>
             </div>
         ))}

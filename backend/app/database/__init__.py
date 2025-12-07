@@ -12,3 +12,4 @@ engine = create_engine(db_url)
 
 def init_db():
     SQLModel.metadata.create_all(engine)
+    print('Подключение к основной базе инициализировано успешно')

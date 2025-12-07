@@ -3,8 +3,9 @@ from app.database import engine
 
 
 # def test():
-#     with Session() as session:
-#         r = User(username='zo1v', password=123, mail='123@vk1.com')
+#     from .models import PostLike
+#     with Session(engine) as session:
+#         r = PostLike(user_id=1, post_id=1)
 #         session.add(r)
 #         session.commit()
 

@@ -1,30 +1,46 @@
 import { useState } from 'react';
+import { useFetch } from '../../hooks/fetch';
+import { getUser } from '../Utils'
+import { useLoginForm } from '../../hooks/forms'
 import { FiHeart, FiMessageCircle, FiRepeat, FiShare2 } from 'react-icons/fi'; 
 
 function SocialActions({post}) {
-  // 1. Инициализация нулей и стейт для лайка
   const [likes, setLikes] = useState(post.like_count); 
+  const { executeFetch } = useFetch();
+  const openLoginForm = useLoginForm()
+
   // const [comments, setComments] = useState(0);
   // const [reposts, setReposts] = useState(0);
   // const [shares, setShares] = useState(0);
   const comments = 0
   const reposts = 0
   const shares = 0
-  const [isLiked, setIsLiked] = useState(false);
+  debugger
+  const [isLiked, setIsLiked] = useState(post.likes ? !post.likes.is_removed : false);
+  const user = getUser()
 
   const handleLike = () => {
-    if (isLiked) {
-      setLikes(prev => prev - 1);
-    } else {
-      setLikes(prev => prev + 1);
-    }
-    setIsLiked(!isLiked);
+      if (!user) {
+          openLoginForm()
+          return null
+      }
+      if (isLiked) {
+          setLikes(prev => prev - 1);
+      } else {
+          setLikes(prev => prev + 1);
+      }
+      setIsLiked(!isLiked);
+
+      executeFetch('post', 'post/like', {
+          user_id: user.id,
+          post_id: post.id,
+          is_liked: isLiked
+      })
   };
 
   // Классы для эффекта "кружка"
   const buttonClasses = "group flex items-center p-2 rounded-full text-gray-700 " +
                         "transition-colors duration-200 ease-in-out " +
-                        // Фон по умолчанию прозрачный (bg-transparent).
                         "hover:bg-gray-100 active:bg-gray-200 " + 
                         "focus:outline-none focus:ring-0"; // Убираем ring, чтобы не было обводки
 

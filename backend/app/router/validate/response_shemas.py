@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 
@@ -23,6 +23,12 @@ class UserRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class LikeSchema(BaseModel):
+    is_removed: bool | None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 # 3. Схема для Post
 class PostRead(BaseModel):
     id: int
@@ -30,8 +36,8 @@ class PostRead(BaseModel):
     text: str
     like_count: int
 
-    # Вложенный объект автора (UserZ)
     author: UserRead
+    likes: Optional[LikeSchema] | None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -45,3 +51,9 @@ class SignUpPost(BaseModel):
     mail: str
     username: str
     password: str
+
+
+class LikeSchema(BaseModel):
+    is_liked: int
+    post_id: int
+    user_id: int

@@ -4,13 +4,16 @@ from typing import Optional, List
 
 
 class Post(SQLModel, table=True):
+    __tablename__ = "Post"
     id: Optional[int] = Field(default=None, primary_key=True)
     create_date: Optional[datetime] = Field(default_factory=datetime.now)
     user_id: Optional[int] = Field(default=None, foreign_key="UserZ.id")
     text: str
     like_count: int = Field(default=0)
+    deleted: bool = Field(default=False)
 
     author: Optional["User"] = Relationship(back_populates="posts")
+    likes: Optional["PostLike"] = Relationship(back_populates="post", sa_relationship_kwargs={"uselist": False})
 
 
 class User(SQLModel, table=True):
@@ -37,3 +40,12 @@ class UserInfo(SQLModel, table=True):
 
     user: User = Relationship(back_populates="info")
 
+
+class PostLike(SQLModel, table=True):
+    __tablename__ = "PostLike"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    post_id: Optional[int] = Field(default=None, foreign_key="Post.id", unique=True)
+    user_id: int
+    is_removed: bool = Field(default=False)
+
+    post: Optional["Post"] = Relationship(back_populates="likes")

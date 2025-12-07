@@ -1,3 +1,6 @@
+import Cookies from 'js-cookie';
+
+
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 export const hasCookie = (name) => {
@@ -16,4 +19,15 @@ export const setUser = async (res) => {
         localStorage.setItem('user', JSON.stringify(user));
         window.location.href = "/";
     }
+}
+
+export const getUser = () => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    return user
+}
+
+export const logOut = () => {
+    Cookies.remove('access_token');
+    window.location.href = "/";
+    localStorage.removeItem('user');
 }

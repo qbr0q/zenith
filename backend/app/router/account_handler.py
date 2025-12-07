@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response, HTTPException, Request
+from fastapi import APIRouter, Depends, Response, HTTPException
 from sqlmodel import Session
 
 from app.database.utils import get_session
@@ -50,10 +50,11 @@ def sign_up(
         raise HTTPException(err_code, err_detail)
 
     user = User(mail=data.mail, username=data.username, password=data.password)
+    token = create_token(user)
+
+    set_token(response, token)
     session.add(user)
     session.commit()
-    token = create_token(user)
-    set_token(response, token)
 
     return {
         'status': 'success',

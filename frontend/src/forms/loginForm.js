@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { useFetch } from '../hooks/fetch';
-import { useModal } from '../hooks/modalProvider';
 import { setUser } from '../components/Utils';
-import SignUpForm from './signUpForm';
+import { useSignUpForm } from '../hooks/forms'
 
 
 function LoginForm() {
     const { executeFetch, error } = useFetch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { setModalContent, setModalTitle } = useModal();
+    const openSignUpForm = useSignUpForm()
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -19,11 +18,6 @@ function LoginForm() {
             (res) => {setUser(res)}
         )
     };
-
-    const setSetUpForm = () => {
-        setModalTitle('Регистрация');
-        setModalContent(<SignUpForm/>);
-    }
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col items-center">
@@ -78,7 +72,7 @@ function LoginForm() {
             
             <span
             className="text-sm text-[var(--color-primary-blue)] cursor-pointer p-0"
-            onClick={setSetUpForm}>
+            onClick={openSignUpForm}>
                 Нет аккаунта? Зарегистрироваться
             </span>
         </form>

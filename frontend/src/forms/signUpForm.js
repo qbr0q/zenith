@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useFetch } from '../hooks/fetch';
-import { useModal } from '../hooks/modalProvider';
 import { setUser } from '../components/Utils';
-import LoginForm from './loginForm';
+import { useLoginForm } from '../hooks/forms'
 
 
 const SignUpForm = () => {
@@ -10,7 +9,7 @@ const SignUpForm = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { setModalContent, setModalTitle } = useModal();
+    const openLoginForm = useLoginForm()
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -20,13 +19,6 @@ const SignUpForm = () => {
             (res) => {setUser(res)}
         )
     };
-
-    const setLoginForm = () => {
-        setModalTitle('Авторизация');
-        setModalContent(
-            <LoginForm/>
-        );
-    }
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col items-center">
@@ -103,7 +95,7 @@ const SignUpForm = () => {
             
             <span
             className="text-sm text-[var(--color-primary-blue)] cursor-pointer p-0"
-            onClick={setLoginForm}>
+            onClick={openLoginForm}>
                 Есть аккаунт? Войти
             </span>
         </form>
