@@ -30,7 +30,6 @@ export const useFetch = () => {
                 default:
                     setError('Неверный HTTP метод')
             }
-            setError(null);
             return response.data;
         } catch (err) {
             let errorMessage = ''

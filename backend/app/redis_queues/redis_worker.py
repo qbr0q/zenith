@@ -33,8 +33,6 @@ def run_redis_worker():
 
 
 def start_worker_thread():
-    print("Запуск воркера Redis в отдельном потоке...")
-
     worker_thread = threading.Thread(target=run_redis_worker, daemon=True)
 
     worker_thread.start()

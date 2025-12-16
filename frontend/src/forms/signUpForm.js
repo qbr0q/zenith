@@ -44,7 +44,7 @@ const SignUpForm = () => {
                 </span>
                 <span>
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                        Юзернейм
+                        Имя пользователя
                     </label>
                     <input
                         id="username"

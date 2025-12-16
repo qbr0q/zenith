@@ -8,7 +8,8 @@ import json
 
 from app.database.utils import get_session
 from app.database.models import Post, PostLike
-from app.router.validate.response_shemas import PostRead, LikeSchema
+from app.router.validate.response_shemas import (PostRead,
+    LikeSchema, CreatePostSchema)
 from app.redis_queues import redis_db
 from settings import REDIS_QUEUE
 
@@ -21,22 +22,8 @@ def last_posts(
     user_id: int | None = None,
     session: Session = Depends(get_session)
 ):
-    # statement = select(
-    #     Post
-    # ).outerjoin(
-    #     PostLike, and_(
-    #         PostLike.user_id == user_id,
-    #         PostLike.post_id == Post.id
-    #     )
-    # ).filter(
-    #     Post.deleted == False
-    # ).order_by(
-    #     Post.create_date
-    # ).limit(10)
     statement = select(
         Post
-    ).order_by(
-        Post.create_date
     ).outerjoin(
         PostLike, and_(
             PostLike.user_id == user_id,
@@ -46,10 +33,25 @@ def last_posts(
         contains_eager(Post.likes)
     ).filter(
         Post.deleted == False
+    ).order_by(
+        Post.create_date.desc()
     ).limit(10)
     posts = session.exec(statement).all()
 
     return posts
+
+
+@router.post('/create_post')
+async def create_post(
+    data: CreatePostSchema,
+    session: Session = Depends(get_session)
+):
+    record = Post(text=data.post_content, user_id=data.user_id)
+    session.add(record)
+    session.commit()
+
+    return {'status': 'success'}
+
 
 
 @router.post('/like')

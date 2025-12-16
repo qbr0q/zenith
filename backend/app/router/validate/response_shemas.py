@@ -57,3 +57,8 @@ class LikeSchema(BaseModel):
     is_liked: int
     post_id: int
     user_id: int
+
+
+class CreatePostSchema(BaseModel):
+    post_content: str
+    user_id: int

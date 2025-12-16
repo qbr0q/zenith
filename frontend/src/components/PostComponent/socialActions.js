@@ -15,7 +15,6 @@ function SocialActions({post}) {
   const comments = 0
   const reposts = 0
   const shares = 0
-  debugger
   const [isLiked, setIsLiked] = useState(post.likes ? !post.likes.is_removed : false);
   const user = getUser()
 
