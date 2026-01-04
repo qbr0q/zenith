@@ -5,7 +5,7 @@ const Logo = () => {
 
     return (
         <img src='/media/favicon.svg'
-        alt='лого' className='h-[50px] mt-[1%] ml-[1%] cursor-pointer'
+        alt='лого' className='h-[65px] ml-[20px] cursor-pointer'
         title='Zenith'
         onClick={goMainPage}/>
     )

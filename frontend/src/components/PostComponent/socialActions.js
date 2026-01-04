@@ -11,10 +11,8 @@ function SocialActions({post}) {
 
   // const [comments, setComments] = useState(0);
   // const [reposts, setReposts] = useState(0);
-  // const [shares, setShares] = useState(0);
   const comments = 0
   const reposts = 0
-  const shares = 0
   const [isLiked, setIsLiked] = useState(post.likes ? !post.likes.is_removed : false);
   const user = getUser()
 
@@ -46,7 +44,7 @@ function SocialActions({post}) {
   const textClasses = "ml-1 text-sm";
 
   return (
-    <div className="flex items-center justify-between max-w-[40%] -m-[7px] text-[18px]">
+    <div className="flex items-center justify-between max-w-[30%] -m-[7px] text-[18px]">
       
       {/* Кнопка "Лайк" */}
       <button className={buttonClasses} onClick={handleLike}>
@@ -67,10 +65,10 @@ function SocialActions({post}) {
       </button>
 
       {/* Кнопка "Поделиться" */}
-      <button className={buttonClasses}>
+      {/* <button className={buttonClasses}>
         <FiShare2 />
         <span className={textClasses}>{shares}</span>
-      </button>
+      </button> */}
       
     </div>
   );

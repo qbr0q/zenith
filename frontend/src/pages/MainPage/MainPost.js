@@ -28,7 +28,7 @@ const MainPost = () => {
         return <div className="text-red-500">Ошибка: {error}</div>;
     }
 
-    return <div className='bg-white rounded-xl border'>
+    return <div className='bg-white rounded-xl border '>
         {user ? <PostPublisher/> : null}
         <Post posts={posts}/>
     </div>

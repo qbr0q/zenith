@@ -16,7 +16,7 @@ const SignUpForm = () => {
         
         let postData = {mail: email, username: username, password: password}
         executeFetch('post', 'account/signup', postData).then(
-            (res) => {setUser(res)}
+            (res) => {if (res.status === 'success') {setUser(res.userId)}}
         )
     };
 

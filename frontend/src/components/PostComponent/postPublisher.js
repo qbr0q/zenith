@@ -1,11 +1,20 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { FiImage, FiSmile  } from "react-icons/fi";
 import { useFetch } from '../../hooks/fetch';
 import { getUser } from '../Utils'
 
 const PostPublisher = () => {
     const [postText, setPostText] = useState('');
+    const textareaRef = useRef(null);
     const { executeFetch } = useFetch();
+
+    useEffect(() => {
+        const textarea = textareaRef.current;
+        if (textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = `${textarea.scrollHeight}px`;
+        }
+  }, [postText]);
 
     // Проверка, есть ли текст, чтобы активировать кнопку
     const isButtonEnabled = postText.trim().length > 0;
@@ -22,23 +31,16 @@ const PostPublisher = () => {
     };
 
     return (
-        <div className="bg-white p-5 rounded-xl max-w-2xl mx-auto">
+        <div className="bg-white p-5 rounded-xl -mb-[5%]">
             <div className="flex space-x-3">
-                
-                {/* <div className="flex-shrink-0">
-                    <img 
-                        className="h-10 w-10 rounded-full object-cover"
-                        src="https://via.placeholder.com/150/007bff/ffffff?text=U" // Замените на реальный URL аватара
-                        alt="User Avatar"
-                    />
-                </div> */}
-
                 <div className="flex-1 min-w-0">
                     
                     {/* Поле ввода текста */}
                     <textarea
-                        className="w-full resize-none border-0 focus:ring-0 text-lg placeholder-gray-500 focus:outline-none"
-                        rows="3"
+                        ref={textareaRef}
+                        className="w-full resize-none border-0 focus:ring-0 text-lg 
+                                    placeholder-gray-500 focus:outline-none overflow-hidden"
+                        rows="1" 
                         placeholder="Что нового?"
                         value={postText}
                         onChange={(e) => setPostText(e.target.value)}

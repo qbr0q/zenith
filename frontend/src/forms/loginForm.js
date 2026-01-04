@@ -15,7 +15,7 @@ function LoginForm() {
         
         let postData = {mail: email, password: password}
         executeFetch('post', 'account/login', postData).then(
-            (res) => {setUser(res)}
+            (res) => {if (res.status === 'success') {setUser(res.userId)}}
         )
     };
 

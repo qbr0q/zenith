@@ -1,23 +1,24 @@
-import Logo from '../../components/Logo'
+import Header from '../../components/Header/Header'
 import MainPost from './MainPost'
-import Account from '../../components/Account'
+import LeftSidebar from '../../components/LeftSidebar'
+import RightSidebar from '../../components/RightSidebar'
 
 
 const MainPage = () => {
-    return <div>
-        <Logo/>
+    return <>
+        <Header/>
         <div className="grid grid-cols-3">
-            {/* <div className="col-start-1">
-                
-            </div> */}
+            <div className="col-start-1 justify-self-center">
+                <LeftSidebar/>
+            </div>
             <div className="col-start-2 rounded-xl">
                 <MainPost/>
             </div>
-            <div className="col-start-3 justify-self-center w-[60%]">
-                <Account/>
+            <div className="col-start-3 w-[60%] justify-self-center">
+                <RightSidebar/>
             </div>
         </div>
-    </div>
+    </>
 }
 
 export default MainPage

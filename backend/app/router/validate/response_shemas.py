@@ -6,6 +6,7 @@ from datetime import datetime
 # 1. Схема для UserInfo
 class UserInfoRead(BaseModel):
     bio: str | None
+    is_verified: bool
 
     model_config = ConfigDict(from_attributes=True)
 
