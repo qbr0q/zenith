@@ -1,6 +1,6 @@
-import Logo from '../Logo'
+import Logo from './Logo'
 import SearchBar from './SearchBar'
-import Account from '../../components/Account'
+import Account from './Account'
 
 
 const Header = () => {

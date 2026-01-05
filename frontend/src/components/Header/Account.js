@@ -1,7 +1,7 @@
-import { isUserAuth, getUser, logOut } from './Utils'
+import { isUserAuth, getUser, logOut } from '../Utils'
 import { useState, useEffect } from 'react'
 import { FiLogOut, FiUser  } from 'react-icons/fi';
-import { useLoginForm } from '../hooks/forms'
+import { useLoginForm } from '../../hooks/forms'
 
 
 const Account = () => {

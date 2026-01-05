@@ -1,4 +1,4 @@
-import { FiUser, FiPlusSquare  } from 'react-icons/fi';
+import { FiUser, FiPlusSquare, FiUsers } from 'react-icons/fi';
 
 const PopularPeople = () => {
   const users = [
@@ -11,7 +11,10 @@ const PopularPeople = () => {
     <div className="bg-white rounded-xl p-6 border shadow-sm">
       {/* Заголовок блока */}
       <div className="flex items-center justify-between mb-5">
-        <h2 className="font-bold text-lg text-gray-800">Кого почитать</h2>
+        <span className='flex items-center gap-2'>
+          <FiUsers size={20} className="text-blue-500" />
+          <h2 className="font-bold text-lg text-gray-800">Кого почитать</h2>
+        </span>
         <button className="text-xs text-blue-500 font-semibold hover:underline">
           Все
         </button>

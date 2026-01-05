@@ -13,7 +13,7 @@ const LeftSidebar = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-6 w-80">
+    <div className="flex flex-col gap-7 w-80">
       
       {/* Блок 1: Популярные темы */}
       <div className="bg-white rounded-xl p-6 border">
