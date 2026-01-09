@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import Like from './LikeButton'
 import Comment from './CommentButton'
 import Repost from './RepostButton'
+import CommentForm from './CommentForm'
 import { getUser } from '../Utils'
 
 
@@ -12,14 +14,22 @@ export const buttonClasses = "group flex items-center p-2 rounded-full text-gray
 export const textClasses = "ml-1 text-sm"
 
 
-const SocialActions = ({likeCount, hasLiked}) => {
+const SocialActions = ({content}) => {
+    const [isCommentOpen, setIsCommentOpen] = useState(false);
+
     const user = getUser()
     return <>
         <div className="flex items-center justify-between max-w-[30%] -m-[7px] text-[18px]">
-            <Like user={user} likeCount={likeCount} hasLiked={hasLiked}/>
-            <Comment/>
+            <Like content={content} user={user}/>
+            <div onClick={() => {setIsCommentOpen(true)}} className="cursor-pointer">
+                <Comment/>
+            </div>
             <Repost/>
-        </div> 
+        </div>
+
+        {isCommentOpen && (
+            <CommentForm setIsCommentOpen={setIsCommentOpen}/>
+        )}
     </>
 }
 

@@ -8,16 +8,17 @@ import json
 
 from app.database.utils import get_session
 from app.database.models import Post, PostLike
-from app.router.validate.response_shemas import (PostRead,
+from app.router.validate.response_shemas import (PostSchema,
     LikeSchema, CreatePostSchema)
 from app.redis_queues import redis_db
+from app.websocket import sio
 from settings import REDIS_QUEUE
 
 
 router = APIRouter(prefix='/post', tags=["Post"])
 
 
-@router.get('/last_posts', response_model=List[PostRead])
+@router.get('/last_posts', response_model=List[PostSchema])
 def last_posts(
     user_id: int | None = None,
     session: Session = Depends(get_session)
@@ -50,12 +51,14 @@ async def create_post(
     session.add(record)
     session.commit()
 
+    post_json = json.loads(PostSchema.model_validate(record).model_dump_json())
+    await sio.emit('new_post', post_json)
+
     return {'status': 'success'}
 
 
-
 @router.post('/like')
-def like(
+async def like(
     data: LikeSchema
 ):
     if not redis_db:

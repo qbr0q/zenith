@@ -13,7 +13,7 @@ export const useFetch = () => {
         setError(null);
         
         try {
-            const url = `${API_BASE_URL}${endpoint}`;
+            const url = `${API_BASE_URL}/${endpoint}`;
             let response = null
             
             switch (method){

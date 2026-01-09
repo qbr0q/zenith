@@ -1,7 +1,13 @@
 import Cookies from 'js-cookie';
+import { io } from 'socket.io-client';
 
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+export const API_BASE_URL = process.env.REACT_APP_API_URL;
+
+export const socket = io(API_BASE_URL, {
+    path: "/ws/",
+    transports: ["websocket"] 
+});
 
 export const hasCookie = (name) => {
     return Cookies.get(name)
@@ -12,7 +18,7 @@ export const isUserAuth = () => {
 }
 
 export const setUser = async (userId) => {
-    const response = await fetch(`${API_BASE_URL}account/getUser/${userId}`)
+    const response = await fetch(`${API_BASE_URL}/account/getUser/${userId}`)
     let user = await response.json()
     localStorage.setItem('user', JSON.stringify(user));
     window.location.href = "/";

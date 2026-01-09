@@ -31,7 +31,7 @@ class LikeSchema(BaseModel):
 
 
 # 3. Схема для Post
-class PostRead(BaseModel):
+class PostSchema(BaseModel):
     id: int
     create_date: datetime
     text: str
@@ -55,7 +55,7 @@ class SignUpPost(BaseModel):
 
 
 class LikeSchema(BaseModel):
-    is_liked: int
+    is_liked: bool | None
     post_id: int
     user_id: int
 

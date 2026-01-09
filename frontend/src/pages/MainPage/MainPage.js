@@ -1,7 +1,7 @@
 import Header from '../../components/Header/Header'
 import MainPost from './MainPost'
-import LeftSidebar from '../../components/LeftSidebar'
-import RightSidebar from '../../components/RightSidebar'
+import LeftSidebar from './LeftSidebar'
+import RightSidebar from './RightSidebar'
 
 
 const MainPage = () => {

@@ -1,5 +1,5 @@
 import { FiRepeat } from 'react-icons/fi'; 
-import { buttonClasses, textClasses } from './socialActions'
+import { buttonClasses, textClasses } from './SocialActions'
 
 
 const Repost = () => {

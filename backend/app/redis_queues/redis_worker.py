@@ -32,7 +32,7 @@ def run_redis_worker():
             print(f"Критическая ошибка воркера: {e}.")
 
 
-def start_worker_thread():
+def start_redis_worker():
     worker_thread = threading.Thread(target=run_redis_worker, daemon=True)
 
     worker_thread.start()
