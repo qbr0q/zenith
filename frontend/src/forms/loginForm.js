@@ -10,13 +10,14 @@ function LoginForm() {
     const [password, setPassword] = useState('');
     const openSignUpForm = useSignUpForm()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
         let postData = {mail: email, password: password}
-        executeFetch('post', 'account/login', postData).then(
-            (res) => {if (res.status === 'success') {setUser(res.userId)}}
-        )
+        try {
+            let res = await executeFetch('post', 'account/login', postData)
+            setUser(res.userId)
+        } catch {}
     };
 
     return (
@@ -31,7 +32,7 @@ function LoginForm() {
                         id="email"
                         type="email"
                         placeholder="mail@example.com"
-                        autocomplete="username"
+                        autoComplete="username"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="p-3 border w-[100%] border-gray-300 
@@ -49,7 +50,7 @@ function LoginForm() {
                         id="password"
                         type="password"
                         placeholder="Пароль"
-                        autocomplete="current-password"
+                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="p-3 border w-[100%] border-gray-300 

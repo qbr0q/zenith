@@ -3,6 +3,7 @@ import Verified from '../Verified'
 import PointsMenu from './Menu'
 import SocialActions from '../socialAction/SocialActions'
 import TextParser from '../textParser'
+import { formatTimeAgo } from '../Utils'
 
 
 const Post = ({posts}) => {
@@ -22,7 +23,9 @@ const Post = ({posts}) => {
                                     <Verified/>
                                 : null}
                             </span>
-                            <span className="font-thin text-[13px]">20ч</span>
+                            <span className="font-thin text-[13px]">
+                                {formatTimeAgo(post.create_date)}
+                            </span>
                         </span>
                     </div>
                     <PointsMenu/>

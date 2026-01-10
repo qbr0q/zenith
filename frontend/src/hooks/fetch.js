@@ -32,15 +32,13 @@ export const useFetch = () => {
             }
             return response.data;
         } catch (err) {
-            let errorMessage = ''
-            if (!err.response) {
-                errorMessage = 'Сетевая ошибка или проблема с бэкендом.'
-            } else {
+            let errorMessage = 'Сетевая ошибка или проблема с бэкендом.'
+            if (err.response) {
                 const errDetail = err.response.data.detail
                 errorMessage = `Ошибка ${err.response.status}: ${typeof errDetail == 'string' ? errDetail : errDetail[0].msg}`
             }
             setError(errorMessage)
-            return {'status': 'error'}
+            throw new Error(errorMessage);
         } finally {
             setLoading(false);
         }

@@ -11,13 +11,14 @@ const SignUpForm = () => {
     const [password, setPassword] = useState('');
     const openLoginForm = useLoginForm()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
         let postData = {mail: email, username: username, password: password}
-        executeFetch('post', 'account/signup', postData).then(
-            (res) => {if (res.status === 'success') {setUser(res.userId)}}
-        )
+        try {
+            let res = await executeFetch('post', 'account/signup', postData)
+            setUser(res.userId)
+        } catch {}
     };
 
     return (

@@ -38,7 +38,7 @@ const MainPost = () => {
     }
 
     if (error) {
-        return <div className="text-red-500">Ошибка: {error.message}</div>;
+        return <div className="text-red-500">{error.message}</div>;
     }
 
     return <div className='bg-white rounded-xl border '>
