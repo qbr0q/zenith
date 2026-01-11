@@ -1,8 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 
-function PointsMenu() {
+
+function PointMenu({menuItems}) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
+
+  const itemStyle = "flex items-center justify-between px-4 py-2 text-sm " +
+                    "text-gray-700 hover:bg-gray-100 hover:text-gray-900 " +
+                    "w-full text-left transition duration-150 ease-in-out " +
+                    "cursor-pointer"
 
   // Обработчик для открытия/закрытия меню
   const handleToggleMenu = () => {
@@ -21,6 +27,21 @@ function PointsMenu() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [menuRef]);
+
+  const getItemStyle = (type) => {
+    if (type === 'danger') {
+      return itemStyle + " text-red-500 fill-current"
+    } else {
+      return itemStyle
+    }
+  }
+
+  const getOnClick = (e, btnHandler) => {
+    debugger
+    e.preventDefault();
+    btnHandler()
+    setIsOpen(false)
+  }
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
@@ -45,50 +66,29 @@ function PointsMenu() {
           origin-top-right absolute right-0 mt-2 w-40 rounded-xl shadow-lg 
           bg-white ring-1 ring-black ring-opacity-5
           transform transition ease-out duration-150 
-          
           ${isOpen 
             ? 'opacity-100 scale-100' // ОТКРЫТО: полная видимость и размер
             : 'opacity-0 scale-95 pointer-events-none' // ЗАКРЫТО: невидимо, немного уменьшено и неактивно для кликов
-          }
-        `}
+          }`
+        }
         style={{ zIndex: isOpen ? 50 : -1 }}
         role="menu"
       >
-        <div className="py-1" role="none">
-          {/* Элемент меню: "Копировать ссылку" */}
-          <span
-            className="flex items-center justify-between px-4 py-2 text-sm 
-                         text-gray-700 hover:bg-gray-100 hover:text-gray-900 
-                         w-full text-left transition duration-150 ease-in-out
-                         cursor-pointer"
-            role="menuitem"
-            onClick={(e) => {
-              e.preventDefault();
-              alert('Ссылка скопирована!');
-              setIsOpen(false);
-            }}
-          >
-            Копировать ссылку
-          </span>
 
-          <span
-            className="flex items-center justify-between px-4 py-2 text-sm 
-                         text-gray-700 hover:bg-gray-100 hover:text-gray-900 
-                         w-full text-left transition duration-150 ease-in-out
-                         cursor-pointer text-red-500 fill-current"
+        <div className="py-1" role="none">
+          {menuItems.map(menuItem => (
+            <span
+            className={getItemStyle(menuItem.type)}
             role="menuitem"
-            onClick={(e) => {
-              e.preventDefault();
-              alert('Жалоба отправлена!');
-              setIsOpen(false);
-            }}
+            onClick={(e) => {getOnClick(e, menuItem.handler)}}
           >
-            Пожаловаться
+            {menuItem.label}
           </span>
+          ))}
         </div>
       </div>
     </div>
   );
 }
 
-export default PointsMenu;
+export default PointMenu;
