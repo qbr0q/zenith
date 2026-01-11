@@ -1,6 +1,6 @@
 import { FiUser } from 'react-icons/fi';
 import Verified from '../Verified'
-import PointsMenu from './Menu'
+import PointsMenu from './PrePointMenu'
 import SocialActions from '../socialAction/SocialActions'
 import TextParser from '../textParser'
 import { formatTimeAgo } from '../Utils'
