@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { LuLink, LuMessageCircleWarning  } from 'react-icons/lu'; 
 
 function PointsMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,7 +42,7 @@ function PointsMenu() {
 
       <div
         className={`
-          origin-top-right absolute right-0 mt-2 w-48 rounded-xl shadow-lg 
+          origin-top-right absolute right-0 mt-2 w-40 rounded-xl shadow-lg 
           bg-white ring-1 ring-black ring-opacity-5
           transform transition ease-out duration-150 
           
@@ -70,7 +69,6 @@ function PointsMenu() {
             }}
           >
             Копировать ссылку
-            <LuLink className="w-4 h-4 ml-2" />
           </span>
 
           <span
@@ -86,7 +84,6 @@ function PointsMenu() {
             }}
           >
             Пожаловаться
-            <LuMessageCircleWarning  className="w-4 h-4 ml-2" />
           </span>
         </div>
       </div>

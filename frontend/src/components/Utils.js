@@ -37,3 +37,31 @@ export const logOut = () => {
     window.location.href = "/";
     localStorage.removeItem('user');
 }
+
+export const formatTimeAgo = (dateString) => {
+    const now = new Date();
+    const past = new Date(dateString);
+    
+    // Разница в миллисекундах
+    const diffInMs = now - past;
+    
+    // Переводим в секунды, минуты и часы
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    // Логика порогов времени
+    if (diffInSeconds < 60) {
+        return "только что";
+    } else if (diffInMinutes < 60) {
+        return `${diffInMinutes}м`;
+    } else if (diffInHours < 24) {
+        return `${diffInHours}ч`;
+    } else if (diffInDays < 7) {
+        return `${diffInDays}д`;
+    } else {
+        // Если прошло больше недели, просто возвращаем дату
+        return past.toLocaleDateString();
+    }
+};
