@@ -1,3 +1,4 @@
+import asyncio
 import redis
 import json
 import threading
@@ -15,7 +16,7 @@ except redis.exceptions.ConnectionError as e:
     redis_db = None
 
 
-def run_redis_worker():
+async def run_redis_worker():
     if not redis_db:
         return None
     while True:
@@ -26,14 +27,19 @@ def run_redis_worker():
                 task_data = json.loads(message)
                 action_group = task_data.get('action_group')
                 if action_group == 'LIKE':
-                    process_like_task(task_data)
+                    await process_like_task(task_data)
 
         except Exception as e:
             print(f"Критическая ошибка воркера: {e}.")
 
 
+def run_async_in_thread():
+    """Обертка для запуска асинхронной функции в потоке"""
+    asyncio.run(run_redis_worker())
+
+
 def start_redis_worker():
-    worker_thread = threading.Thread(target=run_redis_worker, daemon=True)
+    worker_thread = threading.Thread(target=run_async_in_thread, daemon=True)
 
     worker_thread.start()
     print("Воркер запущен.")

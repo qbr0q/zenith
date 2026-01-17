@@ -33,6 +33,20 @@ const MainPost = () => {
         return () => socket.off("new_post");
     }, [queryClient, user?.id]);
 
+    useEffect(() => {
+        socket.on("set_like", (likedPost) => {
+            queryClient.setQueryData(['posts', user?.id], (oldData) => {
+                return oldData.map((post) => 
+                    post.id === likedPost.id 
+                        ? { ...post, like_count: likedPost.likeCount } 
+                        : post
+                );
+            });
+        });
+
+        return () => socket.off("new_post");
+    }, [queryClient, user?.id]);
+
     if (isLoading) {
         return <div className="text-xl">Загрузка постов...</div>;
     }

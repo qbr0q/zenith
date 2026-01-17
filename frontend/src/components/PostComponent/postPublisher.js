@@ -44,6 +44,7 @@ const PostPublisher = () => {
         if (e.shiftKey && e.key === 'Enter') {
             e.preventDefault();
             sendPost()
+            setPostLength(0)
     }}, [])
 
     useEffect(() => {

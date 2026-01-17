@@ -1,10 +1,11 @@
 from app.database.models import Post, PostLike
+from app.websocket import sio
 
 from sqlmodel import select, Session, update
 from app.database import engine
 
 
-def process_like_task(
+async def process_like_task(
     task_data: dict
 ):
     session = Session(engine)
@@ -37,6 +38,9 @@ def process_like_task(
             )
         session.execute(update_stmt)
         session.commit()
+
+        like_count_record = session.exec(select(Post).filter(Post.id == post_id)).first()
+        await sio.emit('set_like', {"id": post_id, "likeCount": like_count_record.like_count})
     except Exception as e:
         session.rollback()
         print(f"Ошибка транзакции для поста {post_id}: {e}")
