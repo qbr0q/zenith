@@ -5,6 +5,10 @@ from dotenv import load_dotenv
 from authx import AuthX, AuthXConfig
 
 
+allow_origins = ["http://localhost:3000"]
+host = '0.0.0.0'
+port = 8080
+
 load_dotenv("config.env")
 
 config = AuthXConfig()
@@ -14,8 +18,6 @@ config.JWT_ACCESS_COOKIE_NAME = os.getenv('JWT_COOKIE_NAME')
 config.JWT_TOKEN_LOCATION = ['cookies']
 config.JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
 security = AuthX(config=config)
-
-allow_origins = ["http://localhost:3000"]
 
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))

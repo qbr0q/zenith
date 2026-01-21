@@ -44,7 +44,7 @@ const PostPublisher = () => {
         if (e.shiftKey && e.key === 'Enter') {
             e.preventDefault();
             sendPost()
-            setPostLength(0)
+            setPostLength(() => 0)
     }}, [])
 
     useEffect(() => {
@@ -71,7 +71,8 @@ const PostPublisher = () => {
                     ref={postPushBtn}
                     onClick={handlePostSubmit}
                     disabled={!isButtonEnabled}
-                    className={`px-4 py-2 text-sm font-semibold rounded-full transition duration-150 mt-2 w-[25%] ${
+                    className={`px-4 py-2 text-sm font-semibold rounded-full transition duration-150 mt-2 w-full 
+                    max-w-[150px] ${
                         isButtonEnabled 
                             ? 'bg-blue-500 text-white hover:bg-blue-600'
                             : 'bg-blue-200 text-white cursor-not-allowed'

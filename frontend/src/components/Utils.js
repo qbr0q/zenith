@@ -1,10 +1,9 @@
 import Cookies from 'js-cookie';
 import { io } from 'socket.io-client';
+import { BASE_URL, API_BASE_URL } from '../config';
 
 
-export const API_BASE_URL = process.env.REACT_APP_API_URL;
-
-export const socket = io(API_BASE_URL, {
+export const socket = io(BASE_URL, {
     path: "/ws/",
     transports: ["websocket"] 
 });

@@ -1,7 +1,8 @@
+from fastapi import APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from settings import allow_origins
+from settings import allow_origins, port, host
 from app.database import init_db
 from app.router import routers
 from app.redis_queues import start_redis_worker
@@ -17,14 +18,16 @@ def run_server(app):
 
     uvicorn.run(
         app,
-        host='localhost',
-        port=8080
+        host=host,
+        port=port
     )
 
 
 def include_handlers(app):
+    api_main_router = APIRouter(prefix="/api")
     for api_router in routers:
-        app.include_router(api_router)
+        api_main_router.include_router(api_router)
+    app.include_router(api_main_router)
 
 
 def apply_config(app):

@@ -1,8 +1,7 @@
 import { useState, useCallback } from 'react';
+import { API_BASE_URL } from '../config';
 import axios from 'axios';
 
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 export const useFetch = () => {
     const [loading, setLoading] = useState(false); 
