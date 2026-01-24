@@ -3,61 +3,56 @@ from typing import Optional, List
 from datetime import datetime
 
 
-# 1. Схема для UserInfo
-class UserInfoRead(BaseModel):
+class UserInfoSchema(BaseModel):
     bio: str | None
     is_verified: bool
 
     model_config = ConfigDict(from_attributes=True)
 
 
-# 2. Схема для User (Автор поста)
-class UserRead(BaseModel):
+class AuthorSchema(BaseModel):
     id: int
     username: str
     first_name: Optional[str] = None
     second_name: Optional[str] = None
 
-    # Вложенная связь 1:1
-    info: Optional[UserInfoRead] = None
+    info: Optional[UserInfoSchema] = None
 
     model_config = ConfigDict(from_attributes=True)
 
 
 class LikeSchema(BaseModel):
+    id: int
     is_removed: bool | None
 
     model_config = ConfigDict(from_attributes=True)
 
 
-# 3. Схема для Post
+class CommentSchema(BaseModel):
+    id: int
+    content: str
+    parent_id: int | None
+    create_date: datetime
+    like_count: int
+    deleted: bool
+
+    author: Optional[AuthorSchema] | None
+    child_comments: List["CommentSchema"] = []
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class PostSchema(BaseModel):
     id: int
     create_date: datetime
     text: str
     like_count: int
 
-    author: UserRead
+    author: AuthorSchema
     likes: Optional[LikeSchema] | None
+    comments: List[CommentSchema] | None
 
     model_config = ConfigDict(from_attributes=True)
-
-
-class LoginPost(BaseModel):
-    mail: str
-    password: str
-
-
-class SignUpPost(BaseModel):
-    mail: str
-    username: str
-    password: str
-
-
-class LikeSchema(BaseModel):
-    is_liked: bool | None
-    post_id: int
-    user_id: int
 
 
 class CreatePostSchema(BaseModel):

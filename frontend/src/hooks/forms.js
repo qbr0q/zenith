@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useModal } from '../hooks/modalProvider';
 import LoginForm from '../forms/loginForm'
 import SignUpForm from '../forms/signUpForm'
+import PostPublisherForm from '../forms/postPublisherForm'
 
 
 export const useLoginForm = () => {
@@ -24,4 +25,15 @@ export const useSignUpForm = () => {
         handleOpenModal()
     }, [setModalTitle, setModalContent, handleOpenModal])
     return openSignUpForm
+}
+
+export const usePostPublisherForm = () => {
+    const { handleOpenModal, setModalTitle, setModalContent } = useModal();
+
+    const openPostPublisherForm = useCallback(() => {
+        setModalTitle('Новый пост')
+        setModalContent(<PostPublisherForm/>)
+        handleOpenModal()
+    }, [setModalTitle, setModalContent, handleOpenModal])
+    return openPostPublisherForm
 }

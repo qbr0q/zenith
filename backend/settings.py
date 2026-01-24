@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from authx import AuthX, AuthXConfig
 
 
-allow_origins = ["http://localhost:3000"]
+allow_origins = ["http://localhost:3000", "http://127.0.0.1:3000", "http://zenith.com:3000"]
 host = '0.0.0.0'
 port = 8080
 

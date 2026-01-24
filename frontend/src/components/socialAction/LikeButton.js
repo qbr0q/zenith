@@ -11,7 +11,7 @@ const Like = ({content, user}) => {
     const openLoginForm = useLoginForm()
     const queryClient = useQueryClient();
 
-    const [isLiked, setIsLiked] = useState(content.likes && !content.likes.is_removed);
+    const [isLiked, setIsLiked] = useState(!!(content.likes && !content.likes.is_removed));
 
     const handleLike = () => {
         if (!user) {
@@ -28,7 +28,7 @@ const Like = ({content, user}) => {
         });
         setIsLiked(!isLiked);
     
-        executeFetch('post', 'post/like', {
+        executeFetch('post', 'social_action/like', {
             user_id: user?.id,
             post_id: content?.id,
             is_liked: isLiked

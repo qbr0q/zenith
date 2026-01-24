@@ -3,11 +3,12 @@ from app.database import engine
 
 
 # def test():
-#     from .models import PostLike
+#     from .models import Comment
 #     with Session(engine) as session:
-#         r = PostLike(user_id=1, post_id=1)
+#         r = Comment(post_id=105, author_id=11, content='test comment')
 #         session.add(r)
 #         session.commit()
+# test()
 
 
 def get_session():

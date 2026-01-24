@@ -1,13 +1,17 @@
 import PointMenu from '../PointMenu'
 
 
-const PostMenu = () => {
+const PostMenu = ({content}) => {
     const handlerCopyBtn = () => {
         alert('Ссылка скопирована!');
     }
     const handlerReportBtn = () => {
         alert('Жалоба отправлена!');
     }
+    const handlerDeletePost = () => {
+        console.log(content)
+    }
+
     const menuItems = [
         {
             label: 'Копировать ссылку',
@@ -20,7 +24,7 @@ const PostMenu = () => {
         },
         {
             label: 'Удалить',
-            handler: handlerReportBtn,
+            handler: handlerDeletePost,
             type: 'danger'
         }
     ]

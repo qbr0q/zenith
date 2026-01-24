@@ -86,7 +86,7 @@ const SignUpForm = () => {
             </div> */}
 
             <button
-                type="submit" id='main-btn'
+                type="submit"
                 className="bg-[rgba(39,123,207,1)] text-white font-semibold 
                 py-3 px-8 rounded-full shadow-lg w-[70%] transition-all duration-200
                 ease-in-out hover:bg-[rgb(55,140,223)] hover:shadow-md mb-4"

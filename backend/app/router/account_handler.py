@@ -3,7 +3,8 @@ from sqlmodel import Session
 
 from app.database.utils import get_session
 from app.database.models import User
-from app.router.validate.response_shemas import LoginPost, SignUpPost, UserRead
+from app.router.validate.response_shemas import AuthorSchema
+from app.router.validate.request_schemas import LoginPost, SignUpPost
 from app.router.validate.validate_form import validate_login, validate_signup
 from .utils import get_user_by_main, create_token, set_token, get_user
 
@@ -62,7 +63,7 @@ def sign_up(
     }
 
 
-@router.get('/getUser/{user_id}', response_model=UserRead)
+@router.get('/getUser/{user_id}', response_model=AuthorSchema)
 async def get_user_post(
     user_id: int,
     session: Session = Depends(get_session)
