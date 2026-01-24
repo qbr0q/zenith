@@ -14,6 +14,7 @@ class Post(SQLModel, table=True):
 
     author: Optional["User"] = Relationship(back_populates="posts")
     likes: Optional["PostLike"] = Relationship(back_populates="post", sa_relationship_kwargs={"uselist": False})
+    comments: List["Comment"] = Relationship(back_populates="post")
 
 
 class User(SQLModel, table=True):
@@ -28,6 +29,7 @@ class User(SQLModel, table=True):
 
     info: Optional["UserInfo"] = Relationship(back_populates="user")
     posts: List["Post"] = Relationship(back_populates="author")
+    comments: Optional["Comment"] = Relationship(back_populates="author")
 
 
 class UserInfo(SQLModel, table=True):
@@ -49,3 +51,18 @@ class PostLike(SQLModel, table=True):
     is_removed: bool = Field(default=False)
 
     post: Optional["Post"] = Relationship(back_populates="likes")
+
+
+class Comment(SQLModel, table=True):
+    __tablename__ = "Comment"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    post_id: Optional[int] = Field(default=None, foreign_key="Post.id")
+    author_id: Optional[int] = Field(default=None, foreign_key="UserZ.id")
+    content: str
+    parent_id: str | None
+    create_date: Optional[datetime] = Field(default_factory=datetime.now)
+    like_count: int = Field(default=0)
+    deleted: bool = Field(default=False)
+
+    post: Optional["Post"] = Relationship(back_populates="comments")
+    author: Optional["User"] = Relationship(back_populates="comments")

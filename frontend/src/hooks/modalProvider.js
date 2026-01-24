@@ -38,10 +38,6 @@ export const useModal = () => useContext(ModalContext);
 // Отдельный компонент модального окна
 const ModalComponent = ({ isOpen, onClose, content, title }) => {
     const handleKeyDown = useCallback((e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            document.getElementById('main-btn')?.click();
-        }
         if (e.key === 'Escape') {
             e.preventDefault();
             onClose();
@@ -68,7 +64,8 @@ const ModalComponent = ({ isOpen, onClose, content, title }) => {
                 className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg mx-4"
                 onClick={e => e.stopPropagation()}
             >
-                <div className="flex justify-between items-center border-b pb-3 mb-4">
+                <div className={`flex justify-between items-center pb-3 
+                ${title ? 'border-b mb-4' : ''}`}>
                     <h2 className="text-xl font-semibold">{title}</h2>
                     <button 
                         className="text-gray-500 hover:text-gray-800 text-2xl"

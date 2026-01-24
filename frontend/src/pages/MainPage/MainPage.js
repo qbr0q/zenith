@@ -8,13 +8,13 @@ const MainPage = () => {
     return <>
         <Header/>
         <div className="grid grid-cols-3">
-            <div className="col-start-1 justify-self-center">
+            <div className="col-start-1 justify-self-center w-[60%]">
                 <LeftSidebar/>
             </div>
             <div className="col-start-2 rounded-xl">
                 <MainPost/>
             </div>
-            <div className="col-start-3 w-[60%] justify-self-center">
+            <div className="col-start-3 justify-self-center w-[60%]">
                 <RightSidebar/>
             </div>
         </div>

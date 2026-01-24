@@ -37,7 +37,6 @@ function PointMenu({menuItems}) {
   }
 
   const getOnClick = (e, btnHandler) => {
-    debugger
     e.preventDefault();
     btnHandler()
     setIsOpen(false)

@@ -55,7 +55,7 @@ const MainPost = () => {
         return <div className="text-red-500">{error.message}</div>;
     }
 
-    return <div className='bg-white rounded-xl border '>
+    return <div className='bg-white rounded-xl border'>
         {user ? <PostPublisher/> : null}
         <Post posts={posts}/>
     </div>

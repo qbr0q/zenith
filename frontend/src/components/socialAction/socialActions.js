@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import Like from './LikeButton'
-import Comment from './CommentButton'
-import Repost from './RepostButton'
-import CommentForm from './CommentForm'
+import LikeButton from './LikeButton'
+import CommentButton from './Comments/CommentButton'
+import RepostButton from './RepostButton'
+import CommentForm from './Comments/CommentForm'
 import { getUser } from '../Utils'
 
 
@@ -20,11 +20,11 @@ const SocialActions = ({content}) => {
     const user = getUser()
     return <>
         <div className="flex items-center justify-between max-w-[30%] -m-[7px] text-[18px]">
-            <Like content={content} user={user}/>
+            <LikeButton content={content} user={user}/>
             <div onClick={() => {setIsCommentOpen(true)}} className="cursor-pointer">
-                <Comment/>
+                <CommentButton content={content}/>
             </div>
-            <Repost/>
+            <RepostButton/>
         </div>
 
         {isCommentOpen && (
