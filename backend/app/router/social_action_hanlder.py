@@ -3,7 +3,7 @@ import json
 from fastapi import APIRouter, Request, HTTPException
 from starlette.responses import JSONResponse
 
-from app.router.validate.request_schemas import LikePost
+from app.router.validate.request_schemas import LikeRequest
 from app.redis_queues import redis_db
 from settings import REDIS_QUEUE
 
@@ -13,10 +13,10 @@ router = APIRouter(prefix='/social_action', tags=["SocialAction"])
 
 @router.post('/like')
 async def like(
-    data: LikePost
+    data: LikeRequest
 ):
     if not redis_db:
-        return HTTPException(503, "Очередь обработки недоступна. Попробуйте позже.")
+        raise HTTPException(503, "Очередь обработки недоступна. Попробуйте позже.")
     task_id = str(uuid.uuid4())
     action_group = 'LIKE'
     action = 'REMOVE' if data.is_liked else 'ADD'

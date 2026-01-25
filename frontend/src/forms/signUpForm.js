@@ -18,7 +18,9 @@ const SignUpForm = () => {
         try {
             let res = await executeFetch('post', 'account/signup', postData)
             setUser(res.userId)
-        } catch {}
+        } catch {
+            console.error(error)
+        }
     };
 
     return (

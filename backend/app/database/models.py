@@ -1,4 +1,5 @@
 from sqlmodel import SQLModel, Field, Relationship
+from sqlalchemy import ForeignKey, Column, Integer
 from datetime import datetime
 from typing import Optional, List
 
@@ -46,7 +47,10 @@ class UserInfo(SQLModel, table=True):
 class PostLike(SQLModel, table=True):
     __tablename__ = "PostLike"
     id: Optional[int] = Field(default=None, primary_key=True)
-    post_id: Optional[int] = Field(default=None, foreign_key="Post.id")
+    post_id: Optional[int] = Field(
+        default=None,
+        sa_column=Column(Integer, ForeignKey("Post.id", ondelete="CASCADE"))
+    )
     user_id: int
     is_removed: bool = Field(default=False)
 

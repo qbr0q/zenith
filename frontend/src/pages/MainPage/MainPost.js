@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useFetch } from '../../hooks/fetch';
 import { getUser, socket } from '../../components/Utils'
 import Post from '../../components/PostComponent/Post'
-import PostPublisher from '../../components/PostComponent/postPublisher'
+import PostPublisher from '../../components/PostComponent/PostPublisher'
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 
 

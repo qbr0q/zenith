@@ -1,18 +1,27 @@
 from pydantic import BaseModel
 
 
-class LoginPost(BaseModel):
+class LoginRequest(BaseModel):
     mail: str
     password: str
 
 
-class SignUpPost(BaseModel):
+class SignUpRequest(BaseModel):
     mail: str
     username: str
     password: str
 
 
-class LikePost(BaseModel):
+class LikeRequest(BaseModel):
     user_id: int
     post_id: int
     is_liked: bool
+
+
+class CreatePostRequest(BaseModel):
+    post_content: str
+    user_id: int
+
+
+class DeletePostRequest(BaseModel):
+    post_id: int

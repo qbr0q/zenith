@@ -6,7 +6,8 @@ import json
 
 from app.database.utils import get_session
 from app.database.models import Post, PostLike, Comment
-from app.router.validate.response_shemas import PostSchema, CreatePostSchema
+from app.router.validate.response_shemas import PostSchema
+from app.router.validate.request_schemas import CreatePostRequest, DeletePostRequest
 from app.websocket import sio
 
 
@@ -39,7 +40,7 @@ def last_posts(
 
 @router.post('/create_post')
 async def create_post(
-    data: CreatePostSchema,
+    data: CreatePostRequest,
     session: Session = Depends(get_session)
 ):
     record = Post(text=data.post_content, user_id=data.user_id)
@@ -50,3 +51,20 @@ async def create_post(
     await sio.emit('new_post', post_json)
 
     return {'status': 'success'}
+
+
+@router.post('/delete_post')
+def delete_post(
+    data: DeletePostRequest,
+    session: Session = Depends(get_session)
+):
+
+    statement = select(
+        Post
+    ).filter(
+        Post.id == data.post_id
+    )
+    post = session.exec(statement).one()
+    post.deleted = True
+
+    session.commit()

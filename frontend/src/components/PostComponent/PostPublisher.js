@@ -4,10 +4,10 @@ const PostPublisher = () => {
     const openPostPublisherForm = usePostPublisherForm();
 
     return (<>
-        <div className="flex flex-col min-w-0 bg-white p-5 rounded-xl">
+        <div className="flex flex-col min-w-0 bg-white rounded-xl">
             <span
                 onClick={openPostPublisherForm}
-                className="text-lg text-gray-500"
+                className="text-lg text-gray-500 cursor-text p-5"
             >
                 Что нового?
             </span>

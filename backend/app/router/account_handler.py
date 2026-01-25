@@ -4,7 +4,7 @@ from sqlmodel import Session
 from app.database.utils import get_session
 from app.database.models import User
 from app.router.validate.response_shemas import AuthorSchema
-from app.router.validate.request_schemas import LoginPost, SignUpPost
+from app.router.validate.request_schemas import LoginRequest, SignUpRequest
 from app.router.validate.validate_form import validate_login, validate_signup
 from .utils import get_user_by_main, create_token, set_token, get_user
 
@@ -14,7 +14,7 @@ router = APIRouter(prefix='/account', tags=["Account"])
 
 @router.post('/login')
 async def login(
-    data: LoginPost,
+    data: LoginRequest,
     response: Response,
     session: Session = Depends(get_session)
 ):
@@ -38,7 +38,7 @@ async def login(
 
 @router.post('/signup')
 def sign_up(
-    data: SignUpPost,
+    data: SignUpRequest,
     response: Response,
     session: Session = Depends(get_session)
 ):

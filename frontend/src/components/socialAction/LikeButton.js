@@ -7,13 +7,13 @@ import { useQueryClient } from '@tanstack/react-query';
 
 
 const Like = ({content, user}) => {
-    const { executeFetch } = useFetch();
+    const { executeFetch, error } = useFetch();
     const openLoginForm = useLoginForm()
     const queryClient = useQueryClient();
 
     const [isLiked, setIsLiked] = useState(!!(content.likes && !content.likes.is_removed));
 
-    const handleLike = () => {
+    const handleLike = async () => {
         if (!user) {
             openLoginForm()
             return null
@@ -27,12 +27,16 @@ const Like = ({content, user}) => {
             );
         });
         setIsLiked(!isLiked);
-    
-        executeFetch('post', 'social_action/like', {
-            user_id: user?.id,
-            post_id: content?.id,
-            is_liked: isLiked
-        })
+
+        try {
+            await executeFetch('post', 'social_action/like', {
+                user_id: user?.id,
+                post_id: content?.id,
+                is_liked: isLiked
+            })
+        } catch {
+            console.error(error)
+        }
     };
   
   return (

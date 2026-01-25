@@ -17,7 +17,9 @@ function LoginForm() {
         try {
             let res = await executeFetch('post', 'account/login', postData)
             setUser(res.userId)
-        } catch {}
+        } catch {
+            console.error(error)
+        }
     };
 
     return (

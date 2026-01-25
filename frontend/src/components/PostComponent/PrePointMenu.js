@@ -1,15 +1,24 @@
 import PointMenu from '../PointMenu'
+import { useFetch } from '../../hooks/fetch';
 
 
 const PostMenu = ({content}) => {
+    const { executeFetch, error } = useFetch();
+
     const handlerCopyBtn = () => {
         alert('Ссылка скопирована!');
     }
     const handlerReportBtn = () => {
         alert('Жалоба отправлена!');
     }
-    const handlerDeletePost = () => {
-        console.log(content)
+    const handlerDeletePost = async () => {
+        try {
+            await executeFetch('post', 'post/delete_post', {
+                post_id: content.id
+            })
+        } catch {
+            console.error(error)
+        }
     }
 
     const menuItems = [
