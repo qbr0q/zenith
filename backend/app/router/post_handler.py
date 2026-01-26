@@ -54,17 +54,19 @@ async def create_post(
 
 
 @router.post('/delete_post')
-def delete_post(
+async def delete_post(
     data: DeletePostRequest,
     session: Session = Depends(get_session)
 ):
+    post_id = data.post_id
 
     statement = select(
         Post
     ).filter(
-        Post.id == data.post_id
+        Post.id == post_id
     )
     post = session.exec(statement).one()
     post.deleted = True
-
     session.commit()
+
+    await sio.emit('delete_post', {"post_id": post_id})

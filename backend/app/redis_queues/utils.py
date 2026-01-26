@@ -40,7 +40,7 @@ async def process_like_task(
         session.commit()
 
         like_count_record = session.exec(select(Post).filter(Post.id == post_id)).first()
-        await sio.emit('set_like', {"id": post_id, "likeCount": like_count_record.like_count})
+        await sio.emit('like_update', {"id": post_id, "likeCount": like_count_record.like_count})
     except Exception as e:
         session.rollback()
         print(f"Ошибка транзакции для поста {post_id}: {e}")

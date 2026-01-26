@@ -2,8 +2,7 @@ from sqlmodel import select, Session
 from fastapi import Response
 
 from app.database.models import User
-from settings import security
-from settings import config
+from settings import security, config
 
 
 def get_user_by_main(session: Session, mail: str):

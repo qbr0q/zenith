@@ -19,7 +19,7 @@ const Like = ({content, user}) => {
             return null
         }
         // обновляем кеш для мгновенного ui отклика
-        queryClient.setQueryData(['posts', user?.id], (oldData) => {
+        queryClient.setQueryData(['posts'], (oldData) => {
             return oldData.map(post => 
                 post.id === content.id 
                 ? { ...post, like_count: isLiked ? post.like_count - 1 : post.like_count + 1 }
