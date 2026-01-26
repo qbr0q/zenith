@@ -1,7 +1,9 @@
 import { isUserAuth, getUser, logOut } from '../Utils'
 import { useState, useEffect } from 'react'
-import { FiLogOut, FiUser  } from 'react-icons/fi';
+import { FiLogOut  } from 'react-icons/fi';
 import { useLoginForm } from '../../hooks/forms'
+import UserAvatar from '../Ui/User/UserAvatar'
+import UserName from "../Ui/User/UserName";
 
 
 const Account = () => {
@@ -20,12 +22,8 @@ const Account = () => {
             const user = getUser()
             setAccountContent(
                 <div className='flex flex-row items-center w-full justify-around'>
-                    <div className="w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center border border-gray-50 text-gray-400 group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors">
-                        <FiUser size={24} />
-                    </div>
-                    <span className='flex justify-self-center font-medium cursor-pointer'>
-                        {user.username}
-                    </span>
+                    <UserAvatar user={user} />
+                    <UserName user={user} />
                     <FiLogOut onClick={logOut} className='cursor-pointer'/>
                 </div>
             )

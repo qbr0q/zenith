@@ -6,6 +6,7 @@ from datetime import datetime
 class UserInfoSchema(BaseModel):
     bio: str | None
     is_verified: bool
+    avatar_url: str
 
     model_config = ConfigDict(from_attributes=True)
 

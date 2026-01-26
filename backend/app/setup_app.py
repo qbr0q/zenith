@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import uvicorn
 
 from settings import allow_origins, port, host
@@ -27,6 +28,7 @@ def include_handlers(app):
     api_main_router = APIRouter(prefix="/api")
     for api_router in routers:
         api_main_router.include_router(api_router)
+    app.mount("/media", StaticFiles(directory="app/media"), name="media")
     app.include_router(api_main_router)
 
 

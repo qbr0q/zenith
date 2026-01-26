@@ -52,6 +52,7 @@ const PostPublisherForm = () => {
 
     return <div className="flex flex-col items-end">
         <textarea
+            autoFocus
             ref={textareaRef}
             className="w-full resize-none border-0 focus:ring-0 text-lg
                 placeholder-gray-500 focus:outline-none overflow-hidden"

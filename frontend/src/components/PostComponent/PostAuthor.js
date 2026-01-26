@@ -1,27 +1,16 @@
-import { FiUser } from 'react-icons/fi';
-import Verified from '../Verified'
 import PointsMenu from './PrePointMenu'
-import { formatTimeAgo } from '../Utils'
+import UserAvatar from '../Ui/User/UserAvatar'
+import UserName from '../Ui/User/UserName'
+import FormatTime from "../Ui/FormatTime";
 
 
 const PostAuthor = ({post}) => {
     return <>
         <div className="flex items-center justify-between">
-            <div className="flex items-center font-semibold justify-between gap-5">
-                <div className="w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center border border-gray-50 text-gray-400 group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors">
-                    <FiUser size={24} />
-                </div>
-                <span className="flex gap-2 items-center">
-                <span className='flex items-center gap-1'>
-                    <span className="text-[17px]">{post.author.username}</span>
-                    {post.author.info.is_verified ?
-                        <Verified/>
-                        : null}
-                </span>
-                <span className="font-thin text-[13px]">
-                    {formatTimeAgo(post.create_date)}
-                </span>
-            </span>
+            <div className="flex items-center justify-between gap-3">
+                <UserAvatar user={post.author}/>
+                <UserName user={post.author} />
+                <FormatTime create_date={post.create_date}/>
             </div>
             <PointsMenu content={post}/>
         </div>

@@ -1,4 +1,4 @@
-import PointMenu from '../PointMenu'
+import PointMenu from '../Ui/PointMenu'
 import { useFetch } from '../../hooks/fetch';
 
 

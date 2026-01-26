@@ -39,6 +39,7 @@ class UserInfo(SQLModel, table=True):
     create_date: Optional[datetime] = Field(default_factory=datetime.now)
     bio: str = Field(nullable=True)
     is_verified: bool = Field(default=False)
+    avatar_url: str = Field(default='default.jpg')
     user_id: Optional[int] = Field(default=None, foreign_key="UserZ.id", unique=True)
 
     user: User = Relationship(back_populates="info")

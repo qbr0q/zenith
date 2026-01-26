@@ -31,7 +31,6 @@ async def login(
     set_token(response, token)
 
     return {
-        'status': 'success',
         'userId': user.id
     }
 
@@ -58,7 +57,6 @@ def sign_up(
     session.commit()
 
     return {
-        'status': 'success',
         'userId': user.id
     }
 
