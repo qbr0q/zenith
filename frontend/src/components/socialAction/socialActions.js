@@ -22,7 +22,7 @@ const SocialActions = ({content}) => {
         <div className="flex items-center justify-between max-w-[30%] -m-[7px] text-[18px]">
             <LikeButton content={content} user={user}/>
             <div onClick={() => {setIsCommentOpen(true)}} className="cursor-pointer">
-                <CommentButton content={content}/>
+                <CommentButton comments={content.comments}/>
             </div>
             <RepostButton/>
         </div>

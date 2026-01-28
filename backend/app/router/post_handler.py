@@ -35,7 +35,23 @@ def last_posts(
     ).limit(10)
     posts = session.exec(statement).all()
 
-    return posts
+    # оставляем только комментарии, кол-во лайков которых больше, чем на посте
+    posts_schemas = [PostSchema.model_validate(post) for post in posts]
+    for post in posts_schemas:
+        if not post.comments:
+            continue
+        top_comment = max(post.comments, key=lambda x: x.like_count)
+        if top_comment.parent_id:
+            parent = next((c for c in post.comments if c.id == top_comment.parent_id), None)
+            if parent:
+                parent.comments = [top_comment]
+                post.comments = [parent]
+            else:
+                post.comments = [top_comment]
+        else:
+            post.comments = [top_comment]
+
+    return posts_schemas
 
 
 @router.post('/create_post')

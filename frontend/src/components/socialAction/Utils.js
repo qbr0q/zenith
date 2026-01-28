@@ -26,13 +26,13 @@ export const buildCommentTree = (list) => {
 export const getHotTakeComment = (list, postLikesCount) => {
     const hotTake = list.reduce((best, cur) =>
         (cur.like_count >= postLikesCount && (!best || cur.like_count > best.like_count)) ? cur : best, null);
+    if (!hotTake) return [];
+    return [hotTake]
 
-    if (!hotTake) return null;
-
-    if (hotTake.parent_id) {
-        const parent = list.find(c => c.id === hotTake.parent_id);
-        return parent ? { ...parent, child_comments: [hotTake] } : hotTake;
-    }
-
-    return { ...hotTake, child_comments: [] };
+    // if (hotTake.parent_id) {
+    //     const parent = list.find(c => c.id === hotTake.parent_id);
+    //     return parent ? { ...parent, child_comments: [hotTake] } : hotTake;
+    // }
+    //
+    // return { ...hotTake, child_comments: [] };
 };

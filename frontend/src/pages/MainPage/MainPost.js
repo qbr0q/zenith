@@ -1,7 +1,8 @@
 import { useFetch } from '../../hooks/fetch';
 import { useSocketHandlers } from '../../hooks/socketHandlers';
 import { getUser, socket } from '../../components/Utils'
-import Post from '../../components/PostComponent/Post'
+// import Post from '../../components/PostComponent/Post'
+import Post from '../../components/Ui/EntryUi/ContentContainer'
 import PostPublisher from '../../components/PostComponent/PostPublisher'
 import { useQuery } from '@tanstack/react-query';
 
@@ -31,7 +32,7 @@ const MainPost = () => {
 
     return <div className='bg-white rounded-xl border'>
         {user ? <PostPublisher/> : null}
-        <Post posts={posts}/>
+        <Post contentItems={posts}/>
     </div>
 }
 

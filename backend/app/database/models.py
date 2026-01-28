@@ -63,8 +63,8 @@ class Comment(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     post_id: Optional[int] = Field(default=None, foreign_key="Post.id")
     author_id: Optional[int] = Field(default=None, foreign_key="UserZ.id")
-    content: str
-    parent_id: str | None
+    text: str
+    parent_id: int | None
     create_date: Optional[datetime] = Field(default_factory=datetime.now)
     like_count: int = Field(default=0)
     deleted: bool = Field(default=False)
