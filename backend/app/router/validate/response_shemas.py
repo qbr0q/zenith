@@ -31,14 +31,14 @@ class LikeSchema(BaseModel):
 
 class CommentSchema(BaseModel):
     id: int
-    content: str
+    text: str
     parent_id: int | None
     create_date: datetime
     like_count: int
     deleted: bool
 
     author: Optional[AuthorSchema] | None
-    child_comments: List["CommentSchema"] = []
+    comments: List["CommentSchema"] = []
 
     model_config = ConfigDict(from_attributes=True)
 

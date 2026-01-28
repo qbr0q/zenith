@@ -1,4 +1,4 @@
-import Verified from "../../Verified";
+import Verified from "./Verified";
 
 
 const UserName = ({user}) => {

@@ -2,9 +2,7 @@ import { FiMessageCircle } from 'react-icons/fi';
 import { buttonClasses, textClasses } from '../SocialActions'
 
 
-const Comment = ({content}) => {
-
-  const comments = content.comments
+const Comment = ({comments}) => {
 
   return <>
     <button className={buttonClasses}>

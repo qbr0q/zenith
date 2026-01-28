@@ -1,8 +1,8 @@
-import PointMenu from '../Ui/PointMenu'
-import { useFetch } from '../../hooks/fetch';
+import PointMenu from '../PointMenu'
+import { useFetch } from '../../../hooks/fetch';
 
 
-const PostMenu = ({content}) => {
+const EntryPointMenu = ({content}) => {
     const { executeFetch, error } = useFetch();
 
     const handlerCopyBtn = () => {
@@ -40,4 +40,4 @@ const PostMenu = ({content}) => {
     return <PointMenu menuItems={menuItems}/>
 }
 
-export default PostMenu
+export default EntryPointMenu
