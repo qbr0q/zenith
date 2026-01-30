@@ -11,7 +11,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data # Чтобы данные не удалялись при стопе
     ports:
-      - "5432:5432"
+      - "5433:5432"
 
   # --- РЕДИС ---
   redis:

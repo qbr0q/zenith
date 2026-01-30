@@ -4,8 +4,8 @@ import os
 from .models import Post
 
 db_url = "postgresql://{}:{}@{}:{}/{}".format(
-    os.getenv('DB_NAME'), os.getenv('DB_PASSWORD'), os.getenv('DB_HOST'),
-    os.getenv('DB_PORT'), os.getenv('DB_SCHEMA')
+    os.getenv('POSTGRES_USER'), os.getenv('POSTGRES_PASSWORD'), os.getenv('POSTGRES_HOST'),
+    os.getenv('POSTGRES_PORT'), os.getenv('POSTGRES_DB')
 )
 engine = create_engine(db_url)
 
