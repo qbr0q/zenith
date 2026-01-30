@@ -36,6 +36,7 @@ class CommentSchema(BaseModel):
     create_date: datetime
     like_count: int
     deleted: bool
+    type: str = "comment"
 
     author: Optional[AuthorSchema] | None
     comments: List["CommentSchema"] = []
@@ -48,6 +49,7 @@ class PostSchema(BaseModel):
     create_date: datetime
     text: str
     like_count: int
+    type: str = "post"
 
     author: AuthorSchema
     likes: Optional[LikeSchema] | None

@@ -63,9 +63,10 @@ const PostPublisherForm = () => {
             onClick={openPostPublisherForm}
             onChange={(e) => {handlePostChange(e)}}
         />
-        <span className={`${postLength ? 'inline' : 'hidden'} text-sm`}>
-            {postLength} / 256
-        </span>
+        {postLength > 200 &&
+            <span className="text-[11px] text-right mt-1 text-gray-400 px-2">
+                {postLength} / 256
+            </span>}
         <button
             ref={postPushBtn}
             onClick={handlePostSubmit}

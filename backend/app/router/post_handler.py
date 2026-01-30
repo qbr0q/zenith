@@ -5,6 +5,7 @@ from typing import List
 import json
 
 from app.database.utils import get_session
+from app.router.utils import get_best_comment_branch
 from app.database.models import Post, PostLike, Comment
 from app.router.validate.response_shemas import PostSchema
 from app.router.validate.request_schemas import CreatePostRequest, DeletePostRequest
@@ -19,39 +20,39 @@ def last_posts(
     user_id: int | None = None,
     session: Session = Depends(get_session)
 ):
-    statement = select(
-        Post
-    ).outerjoin(
-        PostLike, and_(
+    subq = (
+        select(Post.id)
+        .filter(Post.deleted == False)
+        .order_by(Post.create_date.desc())
+        .limit(15)
+        .subquery()
+    )
+
+    statement = (
+        select(Post)
+        .join(subq, Post.id == subq.c.id)
+        .outerjoin(PostLike, and_(
             PostLike.user_id == user_id,
             PostLike.post_id == Post.id
+        ))
+        .outerjoin(Comment, and_(
+            Comment.post_id == Post.id,
+            Comment.deleted == False
+        ))
+        .options(
+            contains_eager(Post.likes),
+            contains_eager(Post.comments)
         )
-    ).options(
-        contains_eager(Post.likes)
-    ).filter(
-        Post.deleted == False
-    ).order_by(
-        Post.create_date.desc()
-    ).limit(10)
-    posts = session.exec(statement).all()
+        .order_by(Post.create_date.desc())
+    )
+    posts = session.exec(statement).unique().all()
 
-    # оставляем только комментарии, кол-во лайков которых больше, чем на посте
-    posts_schemas = [PostSchema.model_validate(post) for post in posts]
-    for post in posts_schemas:
-        if not post.comments:
-            continue
-        top_comment = max(post.comments, key=lambda x: x.like_count)
-        if top_comment.parent_id:
-            parent = next((c for c in post.comments if c.id == top_comment.parent_id), None)
-            if parent:
-                parent.comments = [top_comment]
-                post.comments = [parent]
-            else:
-                post.comments = [top_comment]
-        else:
-            post.comments = [top_comment]
-
-    return posts_schemas
+    result = []
+    for post in posts:
+        post_schema = PostSchema.model_validate(post)
+        post_schema.comments = get_best_comment_branch(post_schema.comments)
+        result.append(post_schema)
+    return result
 
 
 @router.post('/create_post')
@@ -69,7 +70,7 @@ async def create_post(
     return {'status': 'success'}
 
 
-@router.post('/delete_post')
+@router.delete('/delete_post')
 async def delete_post(
     data: DeletePostRequest,
     session: Session = Depends(get_session)

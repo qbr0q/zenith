@@ -26,21 +26,38 @@ export const useFetch = () => {
                         withCredentials: true 
                     });
                     break
+                case 'delete':
+                    response = await axios.delete(url, {
+                        data: data,
+                        withCredentials: true
+                    });
+                    break
                 default:
-                    setError('Неверный HTTP метод')
+                    throw new Error('Неверный HTTP метод')
             }
             return response.data;
         } catch (err) {
-            let errorMessage = 'Сетевая ошибка или проблема с бэкендом.'
-            if (err.response) {
-                const errDetail = err.response.data.detail
-                errorMessage = `Ошибка ${err.response.status}: ${typeof errDetail == 'string' ? errDetail : errDetail[0].msg}`
-            }
-            setError(errorMessage)
+            const errorMessage = getErrorMessage(err);
+            setError(errorMessage);
             throw new Error(errorMessage);
         } finally {
             setLoading(false);
         }
     }, []);
     return { executeFetch, error, loading }; 
+};
+
+
+const getErrorMessage = (err) => {
+    if (typeof err === 'string') return err;
+    if (err.response?.data?.detail) {
+        const detail = err.response.data.detail;
+
+        const message = typeof detail === 'string'
+            ? detail
+            : (Array.isArray(detail) ? detail[0]?.msg : 'Некорректные данные');
+
+        return `Ошибка ${err.response.status}: ${message}`;
+    }
+    return 'Сетевая ошибка или проблема с бэкендом.';
 };

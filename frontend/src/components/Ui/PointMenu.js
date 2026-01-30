@@ -75,8 +75,9 @@ function PointMenu({menuItems}) {
       >
 
         <div className="py-1" role="none">
-          {menuItems.map(menuItem => (
+          {menuItems.map((menuItem, index) => (
             <span
+            key={index}
             className={getItemStyle(menuItem.type)}
             role="menuitem"
             onClick={(e) => {getOnClick(e, menuItem.handler)}}
