@@ -1,1 +1,1 @@
-from .setup_app import run_server
+from .setup_app import run_server, get_configured_app
