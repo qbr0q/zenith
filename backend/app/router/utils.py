@@ -34,3 +34,23 @@ def set_token(response: Response, token):
         value=token,
         expires=config.JWT_ACCESS_TOKEN_EXPIRES
     )
+
+
+def get_best_comment_branch(comments):
+    """
+    Оставляет в списке только ветку самого залайканного комментария.
+    """
+    if not comments:
+        return []
+
+    top_comment = max(comments, key=lambda x: x.like_count)
+
+    if top_comment.parent_id:
+        parent = next((c for c in comments if c.id == top_comment.parent_id), None)
+        if parent:
+            parent.comments = [top_comment]
+            return [parent]
+        else:
+            return []
+
+    return [top_comment]

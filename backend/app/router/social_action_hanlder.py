@@ -1,10 +1,14 @@
 import uuid
 import json
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request, HTTPException, Depends
+from sqlmodel import select, or_, Session
 from starlette.responses import JSONResponse
 
-from app.router.validate.request_schemas import LikeRequest
+from app.router.validate.request_schemas import LikeRequest, DeleteCommentRequest
+from app.database.models import Comment
+from app.database.utils import get_session
 from app.redis_queues import redis_db
+from app.websocket import sio
 from settings import REDIS_QUEUE
 
 
@@ -42,3 +46,27 @@ async def like(
     except Exception as e:
         print(f"Критическая ошибка при публикации: {e}")
         return HTTPException(500, "Не удалось отправить задачу в очередь.")
+
+
+@router.delete('/delete_comment')
+async def delete_comment(
+    data: DeleteCommentRequest,
+    session: Session = Depends(get_session)
+):
+    comment_id = data.comment_id
+
+    statement = select(
+        Comment
+    ).filter(or_(
+        Comment.parent_id == comment_id,
+        Comment.id == comment_id
+    ))
+    comments = session.exec(statement).all()
+    for comment in comments:
+        comment.deleted = True
+    session.commit()
+
+    comment_delete = max(comments, key=lambda x: x.parent_id is None)
+    socket_data = {"id": comment_delete.id, "post_id": comment_delete.post_id}
+
+    await sio.emit('delete_comment', socket_data)

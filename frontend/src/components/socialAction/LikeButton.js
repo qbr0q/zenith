@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 
 const Like = ({content, user}) => {
-    const { executeFetch, error } = useFetch();
+    const { executeFetch } = useFetch();
     const openLoginForm = useLoginForm()
     const queryClient = useQueryClient();
 
@@ -34,8 +34,8 @@ const Like = ({content, user}) => {
                 post_id: content?.id,
                 is_liked: isLiked
             })
-        } catch {
-            console.error(error)
+        } catch (err) {
+            console.error(err)
         }
     };
   
