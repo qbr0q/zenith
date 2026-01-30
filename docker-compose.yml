@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # --- БАЗА ДАННЫХ ---
+  db:
+    image: postgres:17
+    container_name: zenith_db
+    restart: always
+    env_file:
+      - ./backend/config.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Чтобы данные не удалялись при стопе
+    ports:
+      - "5432:5432"
+
+  # --- РЕДИС ---
+  redis:
+    image: redis:7-alpine
+    container_name: zenith_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # --- БЭКЕНД ---
+  backend:
+    build: ./backend
+    container_name: zenith_backend
+    restart: always
+    env_file:
+      - ./backend/config.env
+    environment:
+      # ВАЖНО: теперь бэк ищет базу по имени сервиса 'db'
+      - DB_HOST=db
+      - REDIS_HOST=redis
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8080:8080"
+
+  # --- ФРОНТЕНД ---
+  frontend:
+    build: ./frontend
+    container_name: zenith_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

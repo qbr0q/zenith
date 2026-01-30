@@ -10,15 +10,20 @@ from app.redis_queues import start_redis_worker
 from app.websocket import run_socket
 
 
-def run_server(app):
+def get_configured_app(app):
     apply_config(app)
     init_db()
     include_handlers(app)
     start_redis_worker()
     run_socket(app)
+    return app
+
+
+def run_server(app):
+    configured_app = get_configured_app(app)
 
     uvicorn.run(
-        app,
+        configured_app,
         host=host,
         port=port
     )
