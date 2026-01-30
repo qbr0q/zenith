@@ -40,7 +40,10 @@ class UserInfo(SQLModel, table=True):
     bio: str = Field(nullable=True)
     is_verified: bool = Field(default=False)
     avatar_url: str = Field(default='default.jpg')
-    user_id: Optional[int] = Field(default=None, foreign_key="UserZ.id", unique=True)
+    user_id: Optional[int] = Field(
+        default=None,
+        sa_column=Column(Integer, ForeignKey("UserZ.id", ondelete="CASCADE"))
+    )
 
     user: User = Relationship(back_populates="info")
 

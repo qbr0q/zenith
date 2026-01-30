@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Response, HTTPException
 from sqlmodel import Session
 
 from app.database.utils import get_session
-from app.database.models import User
+from app.database.models import User, UserInfo
 from app.router.validate.response_shemas import AuthorSchema
 from app.router.validate.request_schemas import LoginRequest, SignUpRequest
 from app.router.validate.validate_form import validate_login, validate_signup
@@ -49,12 +49,20 @@ def sign_up(
     if err_code and err_detail:
         raise HTTPException(err_code, err_detail)
 
-    user = User(mail=data.mail, username=data.username, password=data.password)
-    token = create_token(user)
+    try:
+        user = User(mail=data.mail, username=data.username, password=data.password)
+        session.add(user)
+        session.flush()
 
-    set_token(response, token)
-    session.add(user)
-    session.commit()
+        user_info = UserInfo(user_id=user.id)
+        session.add(user_info)
+        session.commit()
+
+        token = create_token(user)
+        set_token(response, token)
+    except Exception as e:
+        session.rollback()
+        raise HTTPException(500, str(e))
 
     return {
         'userId': user.id
