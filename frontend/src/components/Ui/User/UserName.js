@@ -5,7 +5,7 @@ const UserName = ({user}) => {
     return <>
         <span className='flex items-center gap-1 font-semibold'>
             <span
-                className="text-base"
+                className="text-base cursor-pointer"
             >
                 {user.username}
             </span>
