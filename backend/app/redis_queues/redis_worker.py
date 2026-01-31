@@ -3,8 +3,8 @@ import redis
 import json
 import threading
 
+from app.redis_queues.processor import process_like_task
 from settings import REDIS_HOST, REDIS_PORT, REDIS_QUEUE, BLOCK_TIMEOUT
-from .utils import process_like_task
 
 
 try:

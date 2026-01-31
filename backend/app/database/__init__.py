@@ -1,7 +1,6 @@
 from sqlmodel import SQLModel, create_engine
 import os
 
-from .models import Post
 
 db_url = "postgresql://{}:{}@{}:{}/{}".format(
     os.getenv('POSTGRES_USER'), os.getenv('POSTGRES_PASSWORD'), os.getenv('POSTGRES_HOST'),

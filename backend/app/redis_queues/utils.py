@@ -1,48 +1,23 @@
-from app.database.models import Post, PostLike
-from app.websocket import sio
+from fastapi import HTTPException
+from functools import wraps
+import json
 
-from sqlmodel import select, Session, update
-from app.database import engine
+from app.redis_queues import redis_db
+from settings import REDIS_QUEUE
 
 
-async def process_like_task(
-    task_data: dict
-):
-    session = Session(engine)
-    user_id = task_data.get('user_id')
-    post_id = task_data.get('post_id')
-    action = task_data.get('action')
-    is_removed = action == 'REMOVE'
-
+def push_to_queue(task_payload):
     try:
-        statement = select(
-            PostLike
-        ).filter(
-            PostLike.user_id == user_id,
-            PostLike.post_id == post_id
-        )
-        post_like_record = session.exec(statement).first()
-        if post_like_record:
-            post_like_record.is_removed = is_removed
-        else:
-            post_like_record = PostLike(user_id=user_id, post_id=post_id, is_removed=is_removed)
-        session.add(post_like_record)
-
-        if is_removed:
-            update_stmt = update(Post).where(Post.id == post_id).values(
-                like_count=Post.like_count - 1
-            )
-        else:
-            update_stmt = update(Post).where(Post.id == post_id).values(
-                like_count=Post.like_count + 1
-            )
-        session.execute(update_stmt)
-        session.commit()
-
-        like_count_record = session.exec(select(Post).filter(Post.id == post_id)).first()
-        await sio.emit('like_update', {"id": post_id, "likeCount": like_count_record.like_count})
+        redis_db.rpush(REDIS_QUEUE, json.dumps(task_payload))
     except Exception as e:
-        session.rollback()
-        print(f"Ошибка транзакции для поста {post_id}: {e}")
-    finally:
-        session.close()
+        print(f"Критическая ошибка при публикации: {e}")
+        raise HTTPException(500, "Не удалось отправить задачу в очередь.")
+
+
+def check_redis_health(handler):
+    @wraps(handler)
+    async def wrapper(*args, **kwargs):
+        if redis_db is None:
+            raise HTTPException(status_code=503, detail="Очередь обработки недоступна. Попробуйте позже.")
+        return await handler(*args, **kwargs)
+    return wrapper

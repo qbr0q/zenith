@@ -16,12 +16,17 @@ export const textClasses = "ml-1 text-sm"
 
 const SocialActions = ({content}) => {
     const [isCommentOpen, setIsCommentOpen] = useState(false);
-
     const user = getUser()
+    const handleCommentButton = () => {
+        if (user) {
+            setIsCommentOpen(!isCommentOpen);
+        }
+    }
+
     return <>
         <div className="flex items-center justify-between max-w-[30%] -m-[7px] text-[18px]">
             <LikeButton content={content} user={user}/>
-            <div onClick={() => {setIsCommentOpen(!isCommentOpen)}} className="cursor-pointer">
+            <div onClick={handleCommentButton} className="cursor-pointer">
                 <CommentButton comments={content.comments}/>
             </div>
             <RepostButton/>
