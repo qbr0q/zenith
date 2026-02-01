@@ -9,6 +9,7 @@ from app.database.models import Comment
 from app.database.utils import get_session
 from app.redis_queues import redis_db
 from app.redis_queues.utils import push_to_queue, check_redis_health
+from app.router.utils import get_current_user_id
 from app.websocket import sio
 from settings import REDIS_QUEUE
 
@@ -19,7 +20,8 @@ router = APIRouter(prefix='/social_action', tags=["SocialAction"])
 @router.post('/like')
 @check_redis_health
 async def like(
-    data: LikeRequest
+    data: LikeRequest,
+    user_id: int = Depends(get_current_user_id)
 ):
     task_id = str(uuid.uuid4())
     action_group = 'LIKE'
@@ -27,7 +29,7 @@ async def like(
     task_payload = {
         "action_group": action_group,
         "action": action,
-        "user_id": data.user_id,
+        "user_id": user_id,
         "post_id": data.post_id,
         "task_id": task_id
     }

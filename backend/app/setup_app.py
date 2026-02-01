@@ -20,10 +20,8 @@ def get_configured_app(app):
 
 
 def run_server(app):
-    configured_app = get_configured_app(app)
-
     uvicorn.run(
-        configured_app,
+        app,
         host=host,
         port=port
     )

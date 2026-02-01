@@ -1,3 +1,4 @@
+from fastapi import Request, HTTPException
 from sqlmodel import select, Session
 from fastapi import Response
 
@@ -23,7 +24,7 @@ def get_user(session: Session, user_id: int):
 
 def create_token(user: User):
     token = security.create_access_token(
-        str(user.id)
+        uid=str(user.id)
     )
     return token
 
@@ -54,3 +55,37 @@ def get_best_comment_branch(comments):
             return []
 
     return [top_comment]
+
+
+async def get_current_user_id(request: Request):
+    token_name = security.config.JWT_ACCESS_COOKIE_NAME
+    token = request.cookies.get(token_name)
+
+    if not token:
+        raise HTTPException(
+            status_code=401,
+            detail="Пользователь не авторизован"
+        )
+
+    try:
+        access_token = await security.get_access_token_from_request(
+            request
+        )
+        payload = security.verify_token(access_token, verify_csrf=False)
+        return payload.sub
+    except Exception as e:
+        raise HTTPException(
+            status_code=401,
+            detail=f"Токен не валиден: {str(e)}"
+        )
+
+
+def get_response_user(user):
+    return {
+        "id": user.id,
+        "username": user.username,
+        "info": {
+            "is_verified": user.info.is_verified,
+            "avatar_url": user.info.avatar_url
+        }
+    }

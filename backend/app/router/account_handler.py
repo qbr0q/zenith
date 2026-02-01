@@ -6,7 +6,8 @@ from app.database.models import User, UserInfo
 from app.router.validate.response_shemas import AuthorSchema
 from app.router.validate.request_schemas import LoginRequest, SignUpRequest
 from app.router.validate.validate_form import validate_login, validate_signup
-from .utils import get_user_by_main, create_token, set_token, get_user
+from app.router.utils import get_user_by_main, create_token, \
+    set_token, get_user, get_response_user
 
 
 router = APIRouter(prefix='/account', tags=["Account"])
@@ -30,9 +31,9 @@ async def login(
     token = create_token(user)
     set_token(response, token)
 
-    return {
-        'userId': user.id
-    }
+    response_user = get_response_user(user)
+
+    return response_user
 
 
 @router.post('/signup')
@@ -64,16 +65,6 @@ def sign_up(
         session.rollback()
         raise HTTPException(500, str(e))
 
-    return {
-        'userId': user.id
-    }
+    response_user = get_response_user(user)
 
-
-@router.get('/getUser/{user_id}', response_model=AuthorSchema)
-async def get_user_post(
-    user_id: int,
-    session: Session = Depends(get_session)
-):
-    user = get_user(session, user_id)
-
-    return user
+    return response_user

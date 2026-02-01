@@ -11,12 +11,13 @@ port = 8080
 
 load_dotenv("config.env")
 
-config = AuthXConfig()
-config.JWT_CSRF_METHODS = []
-config.JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
-config.JWT_ACCESS_COOKIE_NAME = os.getenv('JWT_COOKIE_NAME')
-config.JWT_TOKEN_LOCATION = ['cookies']
-config.JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+config = AuthXConfig(
+    JWT_CSRF_METHODS=[],
+    JWT_SECRET_KEY=os.getenv('JWT_SECRET_KEY'),
+    JWT_ACCESS_COOKIE_NAME=os.getenv('JWT_COOKIE_NAME'),
+    JWT_TOKEN_LOCATION=['cookies'],
+    JWT_ACCESS_TOKEN_EXPIRES=timedelta(hours=1)
+)
 security = AuthX(config=config)
 
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")

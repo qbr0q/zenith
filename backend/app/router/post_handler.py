@@ -5,7 +5,7 @@ from typing import List
 import json
 
 from app.database.utils import get_session
-from app.router.utils import get_best_comment_branch
+from app.router.utils import get_best_comment_branch, get_current_user_id
 from app.database.models import Post, PostLike, Comment
 from app.router.validate.response_shemas import PostSchema
 from app.router.validate.request_schemas import CreatePostRequest, DeletePostRequest
@@ -58,9 +58,10 @@ def last_posts(
 @router.post('/create_post')
 async def create_post(
     data: CreatePostRequest,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    user_id: int = Depends(get_current_user_id)
 ):
-    record = Post(text=data.post_content, user_id=data.user_id)
+    record = Post(text=data.post_content, user_id=user_id)
     session.add(record)
     session.commit()
 

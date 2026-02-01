@@ -13,7 +13,6 @@ class SignUpRequest(BaseModel):
 
 
 class LikeRequest(BaseModel):
-    user_id: int
     post_id: int
     is_liked: bool
 
