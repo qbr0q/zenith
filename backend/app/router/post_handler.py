@@ -1,14 +1,16 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException,\
+    UploadFile, File, Form
 from sqlmodel import select, Session, and_
 from sqlalchemy.orm import contains_eager
 from typing import List
 import json
 
 from app.database.utils import get_session
-from app.router.utils import get_best_comment_branch, get_current_user_id
-from app.database.models import Post, PostLike, Comment
+from app.router.utils import get_best_comment_branch, \
+    get_current_user_id, save_post_image
+from app.database.models import Post, PostLike, Comment, PostImage
 from app.router.validate.response_shemas import PostSchema
-from app.router.validate.request_schemas import CreatePostRequest, DeletePostRequest
+from app.router.validate.request_schemas import DeletePostRequest
 from app.websocket import sio
 
 
@@ -39,7 +41,9 @@ def last_posts(
             Comment.post_id == Post.id,
             Comment.deleted == False
         ))
-        .options(
+        .outerjoin(
+            PostImage, PostImage.post_id == Post.id
+        ).options(
             contains_eager(Post.likes),
             contains_eager(Post.comments)
         )
@@ -57,18 +61,39 @@ def last_posts(
 
 @router.post('/create_post')
 async def create_post(
-    data: CreatePostRequest,
+    text: str = Form(...),
+    data: List[UploadFile] = File(None),
     session: Session = Depends(get_session),
     user_id: int = Depends(get_current_user_id)
 ):
-    record = Post(text=data.post_content, user_id=user_id)
-    session.add(record)
-    session.commit()
+    try:
+        new_post = Post(text=text, user_id=user_id)
+        session.add(new_post)
+        session.flush()
 
-    post_json = json.loads(PostSchema.model_validate(record).model_dump_json())
-    await sio.emit('new_post', post_json)
+        post_image = []
+        if data:
+            for file in data:
+                image_url = await save_post_image(file)
+                new_image = PostImage(
+                    post_id=new_post.id,
+                    image_path=image_url,
+                    author_id=user_id
+                )
+                session.add(new_image)
+                post_image.append(
+                    {"image_path": new_image.image_path}
+                )
+        session.commit()
+        post_json = json.loads(PostSchema.model_validate(new_post).model_dump_json())
+        post_json['image'] = post_image
 
-    return {'status': 'success'}
+        await sio.emit('new_post', post_json)
+
+        return {'status': 'success'}
+    except Exception as e:
+        session.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.delete('/delete_post')

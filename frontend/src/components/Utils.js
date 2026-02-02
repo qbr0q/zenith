@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { io } from 'socket.io-client';
-import { BASE_URL, API_BASE_URL } from '../config';
+import { BASE_URL } from '../config';
 
 
 export const socket = io(BASE_URL, {
@@ -16,16 +16,16 @@ export const isUserAuth = () => {
     return hasCookie('access_token')
 }
 
-export const setUser = async (userId) => {
-    const response = await fetch(`${API_BASE_URL}/account/getUser/${userId}`)
-    let user = await response.json()
-    localStorage.setItem('user', JSON.stringify(user));
+export const setUser = (res) => {
+    localStorage.setItem('user', JSON.stringify(res));
     window.location.href = "/";
 }
 
 export const getUser = () => {
     let user = null
-    if (isUserAuth()) {
+    const isAuth = isUserAuth();
+
+    if (isAuth) {
         user = JSON.parse(localStorage.getItem('user'))
     }
     return user
