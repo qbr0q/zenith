@@ -17,11 +17,6 @@ class LikeRequest(BaseModel):
     is_liked: bool
 
 
-class CreatePostRequest(BaseModel):
-    post_content: str
-    user_id: int
-
-
 class DeletePostRequest(BaseModel):
     post_id: int
 

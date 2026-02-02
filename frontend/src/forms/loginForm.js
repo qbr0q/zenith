@@ -13,10 +13,10 @@ function LoginForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        let postData = {mail: email, password: password}
+        const postData = {mail: email, password: password}
         try {
-            let res = await executeFetch('post', 'account/login', postData)
-            setUser(res.userId)
+            const res = await executeFetch('post', 'account/login', postData)
+            setUser(res)
         } catch (err) {
             console.error(err)
         }

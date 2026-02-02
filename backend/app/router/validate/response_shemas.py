@@ -44,6 +44,12 @@ class CommentSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class PostImageSchema(BaseModel):
+    image_path: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class PostSchema(BaseModel):
     id: int
     create_date: datetime
@@ -54,10 +60,6 @@ class PostSchema(BaseModel):
     author: AuthorSchema
     likes: Optional[LikeSchema] | None
     comments: List[CommentSchema] | None
+    image: List[PostImageSchema] | None = []
 
     model_config = ConfigDict(from_attributes=True)
-
-
-class CreatePostSchema(BaseModel):
-    post_content: str
-    user_id: int

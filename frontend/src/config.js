@@ -1,8 +1,8 @@
 const getBaseUrl = () => {
     const currentHost = window.location.hostname;
-    const apiUrl = `http://${currentHost}:8080`;
-    return apiUrl
+    return `http://${currentHost}:8080`;
 };
 
 export const BASE_URL = getBaseUrl();
 export const API_BASE_URL = BASE_URL + '/api'
+export const MEDIA_BASE_URL = BASE_URL + '/media'

@@ -16,6 +16,7 @@ class Post(SQLModel, table=True):
     author: Optional["User"] = Relationship(back_populates="posts")
     likes: Optional["PostLike"] = Relationship(back_populates="post", sa_relationship_kwargs={"uselist": False})
     comments: List["Comment"] = Relationship(back_populates="post")
+    image: List["PostImage"] = Relationship(back_populates="post")
 
 
 class User(SQLModel, table=True):
@@ -64,7 +65,10 @@ class PostLike(SQLModel, table=True):
 class Comment(SQLModel, table=True):
     __tablename__ = "Comment"
     id: Optional[int] = Field(default=None, primary_key=True)
-    post_id: Optional[int] = Field(default=None, foreign_key="Post.id")
+    post_id: Optional[int] = Field(
+        default=None,
+        sa_column=Column(Integer, ForeignKey("Post.id", ondelete="CASCADE"))
+    )
     author_id: Optional[int] = Field(default=None, foreign_key="UserZ.id")
     text: str
     parent_id: int | None
@@ -74,3 +78,17 @@ class Comment(SQLModel, table=True):
 
     post: Optional["Post"] = Relationship(back_populates="comments")
     author: Optional["User"] = Relationship(back_populates="comments")
+
+
+class PostImage(SQLModel, table=True):
+    __tablename__ = "PostImage"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    create_date: Optional[datetime] = Field(default_factory=datetime.now)
+    post_id: Optional[int] = Field(
+        default=None,
+        sa_column=Column(Integer, ForeignKey("Post.id", ondelete="CASCADE"))
+    )
+    image_path: str
+    author_id: Optional[int] = Field(default=None, foreign_key="UserZ.id")
+
+    post: Optional["Post"] = Relationship(back_populates="image")

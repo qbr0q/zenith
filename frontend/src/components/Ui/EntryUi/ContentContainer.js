@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import ContentAuthor from './ContentAuthor'
 import SocialActions from '../../socialAction/SocialActions'
 import TextParser from '../../textParser'
+import ImageParse from './ImageParse'
 
 
 const ContentContainer = ({contentItems, isComment=false}) => {
@@ -16,6 +17,7 @@ const ContentContainer = ({contentItems, isComment=false}) => {
                 ${!isComment ? 'px-8 py-6' : ''}`}>
                     <ContentAuthor content={contentItem} />
                     <TextParser>{contentItem.text}</TextParser>
+                    <ImageParse images={contentItem.image}/>
                     <SocialActions content={contentItem}/>
                     {contentItem.comments && <ContentContainer
                         contentItems={contentItem.comments} isComment={true}/>}

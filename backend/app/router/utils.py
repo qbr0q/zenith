@@ -1,9 +1,12 @@
-from fastapi import Request, HTTPException
+import os
+import uuid
+import shutil
+from fastapi import Request, HTTPException, UploadFile
 from sqlmodel import select, Session
 from fastapi import Response
 
 from app.database.models import User
-from settings import security, config
+from settings import security, config, post_content_folder
 
 
 def get_user_by_main(session: Session, mail: str):
@@ -89,3 +92,14 @@ def get_response_user(user):
             "avatar_url": user.info.avatar_url
         }
     }
+
+
+async def save_post_image(upload_file: UploadFile) -> str:
+    extension = os.path.splitext(upload_file.filename)[1].lower()
+    unique_name = f"{uuid.uuid4()}{extension}"
+    file_path = os.path.join(post_content_folder, unique_name)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(upload_file.file, buffer)
+
+    return unique_name

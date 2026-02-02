@@ -14,10 +14,10 @@ const SignUpForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        let postData = {mail: email, username: username, password: password}
+        const postData = {mail: email, username: username, password: password}
         try {
-            let res = await executeFetch('post', 'account/signup', postData)
-            setUser(res.userId)
+            const res = await executeFetch('post', 'account/signup', postData)
+            setUser(res)
         } catch (err) {
             console.error(err)
         }

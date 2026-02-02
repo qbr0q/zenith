@@ -7,19 +7,13 @@ import UserName from "../Ui/User/UserName";
 
 
 const Account = () => {
-    const [isAuth, setIsAuth] = useState(false)
     const [accountContent, setAccountContent] = useState(null)
     const openLoginForm = useLoginForm()
-
-    useEffect(() => {
-        setIsAuth(
-            isUserAuth()
-        )
-    }, [])
+    const isAuth = isUserAuth();
 
     useEffect(() => {
         if (isAuth) {
-            const user = getUser()
+            const user = getUser();
             setAccountContent(
                 <div className='flex flex-row items-center w-full justify-around'>
                     <UserAvatar user={user} />
