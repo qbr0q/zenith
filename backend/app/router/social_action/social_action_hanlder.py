@@ -24,14 +24,14 @@ async def like(
     user_id: int = Depends(get_current_user_id)
 ):
     task_id = str(uuid.uuid4())
-    action_group = 'LIKE'
-    action = 'REMOVE' if data.is_liked else 'ADD'
+    action_group = f"LIKE_{data.type.upper()}"
     task_payload = {
         "action_group": action_group,
-        "action": action,
         "user_id": user_id,
         "post_id": data.post_id,
-        "task_id": task_id
+        "comment_id": data.post_id,
+        "task_id": task_id,
+        "type": data.type
     }
 
     push_to_queue(task_payload)

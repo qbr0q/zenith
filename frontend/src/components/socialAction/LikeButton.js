@@ -2,16 +2,21 @@ import { useState } from 'react';
 import { useFetch } from '../../hooks/fetch';
 import { useLoginForm } from '../../hooks/forms'
 import { FiHeart } from 'react-icons/fi'; 
-import { buttonClasses, textClasses } from './SocialActions'
+import { buttonClasses, textClasses } from './SocialActions';
+import {updateCommentLikes, updatePostLikes } from './Utils';
 import { useQueryClient } from '@tanstack/react-query';
 
 
 const Like = ({content, user}) => {
     const { executeFetch } = useFetch();
     const openLoginForm = useLoginForm()
+    const [isLiked, setIsLiked] = useState(content.is_liked);
     const queryClient = useQueryClient();
 
-    const [isLiked, setIsLiked] = useState(!!(content.likes && !content.likes.is_removed));
+    const updateCacheMap = {
+        post: updatePostLikes,
+        comment: updateCommentLikes
+    }
 
     const handleLike = async () => {
         if (!user) {
@@ -19,19 +24,14 @@ const Like = ({content, user}) => {
             return null
         }
         // обновляем кеш для мгновенного ui отклика
-        queryClient.setQueryData(['posts'], (oldData) => {
-            return oldData.map(post => 
-                post.id === content.id 
-                ? { ...post, like_count: isLiked ? post.like_count - 1 : post.like_count + 1 }
-                : post
-            );
-        });
+        const updateHandler = updateCacheMap[content.type]
+        await updateHandler(queryClient, content, isLiked)
         setIsLiked(!isLiked);
 
         try {
             await executeFetch('post', 'social_action/like', {
                 post_id: content?.id,
-                is_liked: isLiked
+                type: content.type
             })
         } catch (err) {
             console.error(err)

@@ -35,11 +35,14 @@ class CommentSchema(BaseModel):
     parent_id: int | None
     create_date: datetime
     like_count: int
+    post_id: int
     deleted: bool
     type: str = "comment"
+    is_liked: bool = None
 
     author: Optional[AuthorSchema] | None
     comments: List["CommentSchema"] = []
+    likes: list | None = []
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -56,9 +59,9 @@ class PostSchema(BaseModel):
     text: str
     like_count: int
     type: str = "post"
+    is_liked: bool = None
 
     author: AuthorSchema
-    likes: Optional[LikeSchema] | None
     comments: List[CommentSchema] | None
     image: List[PostImageSchema] | None = []
 

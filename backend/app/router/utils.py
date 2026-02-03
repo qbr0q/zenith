@@ -1,63 +1,6 @@
-import os
-import uuid
-import shutil
-from fastapi import Request, HTTPException, UploadFile
-from sqlmodel import select, Session
-from fastapi import Response
+from fastapi import Request, HTTPException
 
-from app.database.models import User
-from settings import security, config, post_content_folder
-
-
-def get_user_by_main(session: Session, mail: str):
-    statement = select(User).filter(User.mail == mail)
-    query = session.exec(statement)
-    user = query.first()
-
-    return user
-
-
-def get_user(session: Session, user_id: int):
-    statement = select(User).filter(User.id == user_id)
-    query = session.exec(statement)
-    user = query.first()
-
-    return user
-
-
-def create_token(user: User):
-    token = security.create_access_token(
-        uid=str(user.id)
-    )
-    return token
-
-
-def set_token(response: Response, token):
-    response.set_cookie(
-        key=config.JWT_ACCESS_COOKIE_NAME,
-        value=token,
-        expires=config.JWT_ACCESS_TOKEN_EXPIRES
-    )
-
-
-def get_best_comment_branch(comments):
-    """
-    Оставляет в списке только ветку самого залайканного комментария.
-    """
-    if not comments:
-        return []
-
-    top_comment = max(comments, key=lambda x: x.like_count)
-
-    if top_comment.parent_id:
-        parent = next((c for c in comments if c.id == top_comment.parent_id), None)
-        if parent:
-            parent.comments = [top_comment]
-            return [parent]
-        else:
-            return []
-
-    return [top_comment]
+from settings import security
 
 
 async def get_current_user_id(request: Request):
@@ -81,25 +24,3 @@ async def get_current_user_id(request: Request):
             status_code=401,
             detail=f"Токен не валиден: {str(e)}"
         )
-
-
-def get_response_user(user):
-    return {
-        "id": user.id,
-        "username": user.username,
-        "info": {
-            "is_verified": user.info.is_verified,
-            "avatar_url": user.info.avatar_url
-        }
-    }
-
-
-async def save_post_image(upload_file: UploadFile) -> str:
-    extension = os.path.splitext(upload_file.filename)[1].lower()
-    unique_name = f"{uuid.uuid4()}{extension}"
-    file_path = os.path.join(post_content_folder, unique_name)
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(upload_file.file, buffer)
-
-    return unique_name

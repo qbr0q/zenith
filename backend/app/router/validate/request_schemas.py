@@ -14,7 +14,7 @@ class SignUpRequest(BaseModel):
 
 class LikeRequest(BaseModel):
     post_id: int
-    is_liked: bool
+    type: str
 
 
 class DeletePostRequest(BaseModel):

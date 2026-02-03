@@ -3,7 +3,7 @@ import redis
 import json
 import threading
 
-from app.redis_queues.processor import process_like_task
+from app.redis_queues.processor import process_like_post, process_like_comment
 from settings import REDIS_HOST, REDIS_PORT, REDIS_QUEUE, BLOCK_TIMEOUT
 
 
@@ -26,8 +26,10 @@ async def run_redis_worker():
                 message = item[1]
                 task_data = json.loads(message)
                 action_group = task_data.get('action_group')
-                if action_group == 'LIKE':
-                    await process_like_task(task_data)
+                if action_group == 'LIKE_POST':
+                    await process_like_post(task_data)
+                elif action_group == 'LIKE_COMMENT':
+                    await process_like_comment(task_data)
 
         except Exception as e:
             print(f"Критическая ошибка воркера: {e}.")
