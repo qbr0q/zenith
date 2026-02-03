@@ -1,13 +1,13 @@
+import json
 from fastapi import APIRouter, Depends, HTTPException,\
     UploadFile, File, Form
-from sqlmodel import select, Session, and_
-from sqlalchemy.orm import contains_eager
+from sqlmodel import select, Session
 from typing import List
-import json
 
 from app.database.utils import get_session
-from app.router.utils import get_best_comment_branch, \
-    get_current_user_id, save_post_image
+from app.router.utils import get_current_user_id
+from app.router.post.utils import get_best_comment_branch, \
+    save_post_image, get_feed_posts
 from app.database.models import Post, PostLike, Comment, PostImage
 from app.router.validate.response_shemas import PostSchema
 from app.router.validate.request_schemas import DeletePostRequest
@@ -22,40 +22,14 @@ def last_posts(
     user_id: int | None = None,
     session: Session = Depends(get_session)
 ):
-    subq = (
-        select(Post.id)
-        .filter(Post.deleted == False)
-        .order_by(Post.create_date.desc())
-        .limit(15)
-        .subquery()
-    )
-
-    statement = (
-        select(Post)
-        .join(subq, Post.id == subq.c.id)
-        .outerjoin(PostLike, and_(
-            PostLike.user_id == user_id,
-            PostLike.post_id == Post.id
-        ))
-        .outerjoin(Comment, and_(
-            Comment.post_id == Post.id,
-            Comment.deleted == False
-        ))
-        .outerjoin(
-            PostImage, PostImage.post_id == Post.id
-        ).options(
-            contains_eager(Post.likes),
-            contains_eager(Post.comments)
-        )
-        .order_by(Post.create_date.desc())
-    )
-    posts = session.exec(statement).unique().all()
+    posts = get_feed_posts(session, user_id)
 
     result = []
-    for post in posts:
-        post_schema = PostSchema.model_validate(post)
-        post_schema.comments = get_best_comment_branch(post_schema.comments)
-        result.append(post_schema)
+    for post_obj, is_liked in posts:
+        validate_obj = PostSchema.model_validate(post_obj)
+        validate_obj.is_liked = is_liked
+        validate_obj.comments = get_best_comment_branch(validate_obj.comments, validate_obj.like_count)
+        result.append(validate_obj)
     return result
 
 

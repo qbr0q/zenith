@@ -57,9 +57,20 @@ class PostLike(SQLModel, table=True):
         sa_column=Column(Integer, ForeignKey("Post.id", ondelete="CASCADE"))
     )
     user_id: int
-    is_removed: bool = Field(default=False)
 
     post: Optional["Post"] = Relationship(back_populates="likes")
+
+
+class CommentLike(SQLModel, table=True):
+    __tablename__ = "CommentLike"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    comment_id: Optional[int] = Field(
+        default=None,
+        sa_column=Column(Integer, ForeignKey("Comment.id", ondelete="CASCADE"))
+    )
+    user_id: int
+
+    comments: Optional["Comment"] = Relationship(back_populates="likes")
 
 
 class Comment(SQLModel, table=True):
@@ -78,6 +89,8 @@ class Comment(SQLModel, table=True):
 
     post: Optional["Post"] = Relationship(back_populates="comments")
     author: Optional["User"] = Relationship(back_populates="comments")
+    likes: Optional["CommentLike"] = Relationship(back_populates="comments",
+                                                  sa_relationship_kwargs={"uselist": False})
 
 
 class PostImage(SQLModel, table=True):

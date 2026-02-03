@@ -3,11 +3,10 @@ from sqlmodel import Session
 
 from app.database.utils import get_session
 from app.database.models import User, UserInfo
-from app.router.validate.response_shemas import AuthorSchema
 from app.router.validate.request_schemas import LoginRequest, SignUpRequest
 from app.router.validate.validate_form import validate_login, validate_signup
-from app.router.utils import get_user_by_main, create_token, \
-    set_token, get_user, get_response_user
+from app.router.account.utils import get_user_by_main, create_token, \
+    set_token, get_response_user
 
 
 router = APIRouter(prefix='/account', tags=["Account"])
