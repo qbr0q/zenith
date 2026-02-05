@@ -89,8 +89,7 @@ class Comment(SQLModel, table=True):
 
     post: Optional["Post"] = Relationship(back_populates="comments")
     author: Optional["User"] = Relationship(back_populates="comments")
-    likes: Optional["CommentLike"] = Relationship(back_populates="comments",
-                                                  sa_relationship_kwargs={"uselist": False})
+    likes: List["CommentLike"] = Relationship(back_populates="comments")
 
 
 class PostImage(SQLModel, table=True):

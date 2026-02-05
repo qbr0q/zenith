@@ -1,4 +1,4 @@
-import {formatTimeAgo} from "../Utils";
+import { formatTimeAgo } from "../utils";
 
 
 const UserAvatar = ({create_date}) => {

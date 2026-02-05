@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import ContentAuthor from './ContentAuthor'
-import SocialActions from '../../socialAction/SocialActions'
+import SocialActions from '../../social-action/SocialActions'
 import TextParser from '../../textParser'
 import ImageParse from './ImageParse'
 

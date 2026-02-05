@@ -13,18 +13,33 @@ def get_user_by_main(session: Session, mail: str):
     return user
 
 
-def create_token(user: User):
-    token = security.create_access_token(
-        uid=str(user.id)
+def create_access_token(user_id):
+    access_token = security.create_access_token(
+        uid=str(user_id)
     )
-    return token
+    return access_token
 
 
-def set_token(response: Response, token):
+def create_refresh_token(user_id):
+    refresh_token = security.create_refresh_token(
+        uid=str(user_id)
+    )
+    return refresh_token
+
+
+def set_access_token(response: Response, token):
     response.set_cookie(
         key=security.config.JWT_ACCESS_COOKIE_NAME,
         value=token,
         expires=security.config.JWT_ACCESS_TOKEN_EXPIRES
+    )
+
+
+def set_refresh_token(response: Response, token):
+    response.set_cookie(
+        key=security.config.JWT_REFRESH_COOKIE_NAME,
+        value=token,
+        expires=security.config.JWT_REFRESH_TOKEN_EXPIRES
     )
 
 

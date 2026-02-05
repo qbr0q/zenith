@@ -3,7 +3,7 @@ import { useFetch } from '../../hooks/fetch';
 import { useLoginForm } from '../../hooks/forms'
 import { FiHeart } from 'react-icons/fi'; 
 import { buttonClasses, textClasses } from './SocialActions';
-import {updateCommentLikes, updatePostLikes } from './Utils';
+import {updateCommentLikes, updatePostLikes } from './utils';
 import { useQueryClient } from '@tanstack/react-query';
 
 

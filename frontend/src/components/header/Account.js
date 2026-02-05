@@ -1,4 +1,4 @@
-import { isUserAuth, getUser, logOut } from '../Utils'
+import { isUserAuth, getUser, logOut } from '../utils'
 import { useState, useEffect } from 'react'
 import { FiLogOut  } from 'react-icons/fi';
 import { useLoginForm } from '../../hooks/forms'

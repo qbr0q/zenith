@@ -81,7 +81,7 @@ const PostPublisherForm = () => {
 
     return <div className="flex flex-col items-end">
         {selectedFiles.length > 0 && (
-            <div className="grid grid-cols-3 gap-2 mt-2 w-full">
+            <div className="grid grid-cols-3 gap-2 mt-2 w-full mb-4">
                 {selectedFiles.map((file) => (
                     <div key={file.id} className="relative aspect-square">
                         <img

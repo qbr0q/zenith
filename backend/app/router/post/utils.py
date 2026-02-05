@@ -7,6 +7,7 @@ from fastapi import UploadFile
 
 from app.database.models import Post, PostLike, \
     Comment, PostImage
+from settings import post_content_folder
 
 
 def get_feed_posts(session, user_id, limit=15):
@@ -44,7 +45,7 @@ def get_feed_posts(session, user_id, limit=15):
     return posts
 
 
-def get_best_comment_branch(comments, post_like_count):
+def get_best_comment_branch(comments, post_like_count, user_id):
     """
     Оставляет в списке только ветку самого залайканного комментария.
     """
@@ -54,12 +55,12 @@ def get_best_comment_branch(comments, post_like_count):
     top_comment = max(comments, key=lambda x: x.like_count)
     if top_comment.like_count < post_like_count:
         return []
-    top_comment.is_liked = bool(top_comment.likes)
+    top_comment.is_liked = bool(top_comment.likes and [i for i in top_comment.likes if i.user_id == user_id])
 
     if top_comment.parent_id:
         parent = next((c for c in comments if c.id == top_comment.parent_id), None)
         if parent:
-            parent.is_liked = bool(parent.likes)
+            parent.is_liked = bool(parent.likes and [i for i in parent.likes if i.user_id == user_id])
             parent.comments = [top_comment]
             return [parent]
         else:
