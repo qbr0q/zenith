@@ -49,3 +49,20 @@ export const updateCommentLikes = async (queryClient, content, isLiked) => {
         });
     });
 }
+
+export const getCountComments = (data) => {
+    // Если нам прилетел массив (верхний уровень), проходим по нему
+    if (Array.isArray(data)) {
+        return data.reduce((acc, item) => acc + getCountComments(item), 0);
+    }
+
+    // Если это один объект:
+    // 1 (за сам текущий коммент) + рекурсивный обход его детей
+    let count = 1;
+
+    if (data.comments && data.comments.length > 0) {
+        count += getCountComments(data.comments);
+    }
+
+    return count;
+};

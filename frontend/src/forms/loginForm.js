@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFetch } from '../hooks/fetch';
-import { setUser } from '../components/Utils';
+import { setUser } from '../components/utils';
 import { useSignUpForm } from '../hooks/forms'
 
 
@@ -15,7 +15,7 @@ function LoginForm() {
         
         const postData = {mail: email, password: password}
         try {
-            const res = await executeFetch('post', 'account/login', postData)
+            const res = await executeFetch('post', 'auth/login', postData)
             setUser(res)
         } catch (err) {
             console.error(err)

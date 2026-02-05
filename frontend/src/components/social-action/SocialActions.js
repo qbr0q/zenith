@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import LikeButton from './LikeButton'
-import CommentButton from './Comments/CommentButton'
+import CommentButton from './comments/CommentButton'
 import RepostButton from './RepostButton'
-import CommentForm from './Comments/CommentForm'
-import { getUser } from '../Utils'
+import CommentForm from './comments/CommentForm'
+import { getUser } from '../utils'
 
 
 export const buttonClasses = "group flex items-center p-2 rounded-full text-gray-700 " +

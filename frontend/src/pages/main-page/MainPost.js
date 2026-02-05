@@ -1,8 +1,8 @@
 import { useFetch } from '../../hooks/fetch';
 import { useSocketHandlers } from '../../hooks/socketHandlers';
-import { getUser, socket } from '../../components/Utils'
-import Post from '../../components/Ui/EntryUi/ContentContainer'
-import PostPublisher from '../../components/PostComponent/PostPublisher'
+import { getUser, socket } from '../../components/utils'
+import Post from '../../components/Ui/entry-ui/ContentContainer'
+import PostPublisher from '../../components/post-component/PostPublisher'
 import { useQuery } from '@tanstack/react-query';
 
 

@@ -33,6 +33,7 @@ export const getUser = () => {
 
 export const logOut = () => {
     Cookies.remove('access_token');
+    Cookies.remove('refresh_token');
     window.location.href = "/";
     localStorage.removeItem('user');
 }

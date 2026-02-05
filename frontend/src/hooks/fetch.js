@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { API_BASE_URL } from '../config';
+import { getErrorMessage, refreshAccessToken } from './utils';
 import axios from 'axios';
 
 
@@ -37,6 +38,25 @@ export const useFetch = () => {
             }
             return response.data;
         } catch (err) {
+            const status = err.response?.status;
+            const errorDetail = err.response?.data?.detail;
+
+            if (status === 401) {
+                if (errorDetail === "AUTH_REQUIRED" || errorDetail === "TOKEN_EXPIRED") {
+                    try {
+                        await refreshAccessToken();
+                        return await executeFetch(method, endpoint, data);
+                    } catch (refreshErr) {
+                        const errorMessage = "Сессия истекла, войдите снова";
+                        setError(errorMessage);
+                        throw new Error(errorMessage);
+                    }
+                }
+
+                // Случай Б: 401, но это не протухший токен (например, неверный пароль)
+                // Мы НЕ выходим из catch, а идем к общей обработке ошибок ниже
+            }
+
             const errorMessage = getErrorMessage(err);
             setError(errorMessage);
             throw new Error(errorMessage);
@@ -45,19 +65,4 @@ export const useFetch = () => {
         }
     }, []);
     return { executeFetch, error, loading }; 
-};
-
-
-const getErrorMessage = (err) => {
-    if (typeof err === 'string') return err;
-    if (err.response?.data?.detail) {
-        const detail = err.response.data.detail;
-
-        const message = typeof detail === 'string'
-            ? detail
-            : (Array.isArray(detail) ? detail[0]?.msg : 'Некорректные данные');
-
-        return `Ошибка ${err.response.status}: ${message}`;
-    }
-    return 'Сетевая ошибка или проблема с бэкендом.';
 };

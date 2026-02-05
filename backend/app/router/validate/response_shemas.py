@@ -22,9 +22,8 @@ class AuthorSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class LikeSchema(BaseModel):
-    id: int
-    is_removed: bool | None
+class CommentLikeSchema(BaseModel):
+    user_id: int
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -42,7 +41,7 @@ class CommentSchema(BaseModel):
 
     author: Optional[AuthorSchema] | None
     comments: List["CommentSchema"] = []
-    likes: list | None = []
+    likes: List["CommentLikeSchema"] | None = []
 
     model_config = ConfigDict(from_attributes=True)
 

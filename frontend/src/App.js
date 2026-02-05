@@ -1,5 +1,5 @@
 import { RouterProvider } from "react-router-dom";
-import Routers from './Routers'
+import Routers from './routers'
 import { ModalProvider } from './hooks/modalProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 

@@ -28,7 +28,7 @@ def last_posts(
     for post_obj, is_liked in posts:
         validate_obj = PostSchema.model_validate(post_obj)
         validate_obj.is_liked = is_liked
-        validate_obj.comments = get_best_comment_branch(validate_obj.comments, validate_obj.like_count)
+        validate_obj.comments = get_best_comment_branch(validate_obj.comments, validate_obj.like_count, user_id)
         result.append(validate_obj)
     return result
 
