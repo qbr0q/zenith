@@ -16,7 +16,7 @@ export const useFetch = () => {
             const url = `${API_BASE_URL}/${endpoint}`;
             let response = null
             
-            switch (method){
+            switch (method) {
                 case 'get':
                     response = await axios.get(url, {
                         withCredentials: true
@@ -52,9 +52,6 @@ export const useFetch = () => {
                         throw new Error(errorMessage);
                     }
                 }
-
-                // Случай Б: 401, но это не протухший токен (например, неверный пароль)
-                // Мы НЕ выходим из catch, а идем к общей обработке ошибок ниже
             }
 
             const errorMessage = getErrorMessage(err);

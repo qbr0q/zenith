@@ -4,6 +4,7 @@ import CommentButton from './comments/CommentButton'
 import RepostButton from './RepostButton'
 import CommentForm from './comments/CommentForm'
 import { getUser } from '../utils'
+import { useLoginForm } from '../../hooks/forms'
 
 
 export const buttonClasses = "group flex items-center p-2 rounded-full text-gray-700 " +
@@ -16,10 +17,14 @@ export const textClasses = "ml-1 text-sm"
 
 const SocialActions = ({content}) => {
     const [isCommentOpen, setIsCommentOpen] = useState(false);
+    const openLoginForm = useLoginForm()
     const user = getUser()
+
     const handleCommentButton = () => {
         if (user) {
             setIsCommentOpen(!isCommentOpen);
+        } else {
+            openLoginForm()
         }
     }
 

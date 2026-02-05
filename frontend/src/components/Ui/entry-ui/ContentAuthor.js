@@ -1,6 +1,6 @@
 import EntryPointMenu from './EntryPointMenu'
-import UserAvatar from '../User/UserAvatar'
-import UserName from '../User/UserName'
+import UserAvatar from '../user/UserAvatar'
+import UserName from '../user/UserName'
 import FormatTime from "../FormatTime";
 
 

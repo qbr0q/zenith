@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import UserAvatar from '../../Ui/User/UserAvatar'
+import UserAvatar from '../../ui/user/UserAvatar'
 
 
 const CommentForm = ({user}) => {
