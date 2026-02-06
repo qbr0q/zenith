@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import {MEDIA_BASE_URL} from "../../../config";
 
 
-const ImageParse = ({ images }) => {
+const ImageParser = ({ type, images }) => {
     const scrollRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -29,6 +29,13 @@ const ImageParse = ({ images }) => {
         }
     };
 
+    let mediaUrl = ''
+    if (type === 'post') {
+        mediaUrl = `${MEDIA_BASE_URL}/uploads/post_media`
+    } else if (type === 'comment') {
+        mediaUrl = `${MEDIA_BASE_URL}/uploads/comment_media`
+    }
+
     return (
         <div className="relative group w-full overflow-hidden rounded-xl border border-gray-200">
             {/* Контейнер со скроллом */}
@@ -41,7 +48,7 @@ const ImageParse = ({ images }) => {
                 {images.map((image, idx) => (
                     <div key={idx} className="flex-shrink-0 w-full snap-center  flex items-center justify-center">
                         <img
-                            src={`${MEDIA_BASE_URL}/uploads/${image.image_path}`}
+                            src={`${mediaUrl}/${image.image_path}`}
                             alt={`content-${idx}`}
                             className="max-h-[500px] w-full object-contain"
                         />
@@ -84,4 +91,4 @@ const ImageParse = ({ images }) => {
     );
 };
 
-export default ImageParse
+export default ImageParser

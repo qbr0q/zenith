@@ -1,8 +1,8 @@
 import { Fragment } from 'react'
 import ContentAuthor from './ContentAuthor'
 import SocialActions from '../../social-action/SocialActions'
-import TextParser from '../../textParser'
-import ImageParse from './ImageParse'
+import TextParser from '../parser/TextParser'
+import ImageParser from '../parser/ImageParser'
 
 
 const ContentContainer = ({contentItems, isComment=false}) => {
@@ -16,8 +16,8 @@ const ContentContainer = ({contentItems, isComment=false}) => {
                 <div className={`flex flex-col gap-4 whitespace-pre-wrap break-words 
                 ${!isComment ? 'px-8 py-6' : ''}`}>
                     <ContentAuthor content={contentItem} />
-                    <TextParser>{contentItem.text}</TextParser>
-                    <ImageParse images={contentItem.image}/>
+                    <TextParser children={contentItem.text}/>
+                    <ImageParser type={contentItem.type} images={contentItem.image}/>
                     <SocialActions content={contentItem}/>
                     {contentItem.comments && <ContentContainer
                         contentItems={contentItem.comments} isComment={true}/>}

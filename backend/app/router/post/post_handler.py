@@ -7,11 +7,12 @@ from typing import List
 from app.database.utils import get_session
 from app.router.utils import get_current_user_id
 from app.router.post.utils import get_best_comment_branch, \
-    save_post_image, get_feed_posts
+    attach_post_images, get_feed_posts
 from app.database.models import Post, PostLike, Comment, PostImage
 from app.router.validate.response_shemas import PostSchema
 from app.router.validate.request_schemas import DeletePostRequest
 from app.websocket import sio
+from settings import post_content_folder
 
 
 router = APIRouter(prefix='/post', tags=["Post"])
@@ -45,22 +46,10 @@ async def create_post(
         session.add(new_post)
         session.flush()
 
-        post_image = []
-        if data:
-            for file in data:
-                image_url = await save_post_image(file)
-                new_image = PostImage(
-                    post_id=new_post.id,
-                    image_path=image_url,
-                    author_id=user_id
-                )
-                session.add(new_image)
-                post_image.append(
-                    {"image_path": new_image.image_path}
-                )
+        await attach_post_images(session, data, new_post.id, user_id)
         session.commit()
+
         post_json = json.loads(PostSchema.model_validate(new_post).model_dump_json())
-        post_json['image'] = post_image
 
         await sio.emit('new_post', post_json)
 

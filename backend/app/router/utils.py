@@ -1,3 +1,6 @@
+import os
+import uuid
+import shutil
 from fastapi import Request, HTTPException
 from authx.exceptions import JWTDecodeError
 
@@ -30,3 +33,23 @@ async def get_current_user_id(request: Request):
             status_code=500,
             detail=str(e)
         )
+
+
+async def save_image(upload_file, media_folder) -> str:
+    extension = os.path.splitext(upload_file.filename)[1].lower()
+    unique_name = f"{uuid.uuid4()}{extension}"
+    file_path = os.path.join(media_folder, unique_name)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(upload_file.file, buffer)
+
+    return unique_name
+
+
+async def _handle_upload(files, author_id, media_folder, **extra_fields):
+    results = []
+    if files:
+        for file in files:
+            url = await save_image(file, media_folder)
+            results.append({"image_path": url, "author_id": author_id, **extra_fields})
+    return results

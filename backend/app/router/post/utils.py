@@ -1,12 +1,9 @@
-import os
-import uuid
-import shutil
 from sqlmodel import select, exists, and_
 from sqlalchemy.orm import contains_eager
-from fastapi import UploadFile
 
 from app.database.models import Post, PostLike, \
     Comment, PostImage
+from app.router.utils import _handle_upload
 from settings import post_content_folder
 
 
@@ -53,8 +50,8 @@ def get_best_comment_branch(comments, post_like_count, user_id):
         return []
 
     top_comment = max(comments, key=lambda x: x.like_count)
-    if top_comment.like_count < post_like_count:
-        return []
+    # if top_comment.like_count < post_like_count:
+    #     return []
     top_comment.is_liked = bool(top_comment.likes and [i for i in top_comment.likes if i.user_id == user_id])
 
     if top_comment.parent_id:
@@ -69,12 +66,8 @@ def get_best_comment_branch(comments, post_like_count, user_id):
     return [top_comment]
 
 
-async def save_post_image(upload_file: UploadFile) -> str:
-    extension = os.path.splitext(upload_file.filename)[1].lower()
-    unique_name = f"{uuid.uuid4()}{extension}"
-    file_path = os.path.join(post_content_folder, unique_name)
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(upload_file.file, buffer)
-
-    return unique_name
+async def attach_post_images(session, files, post_id, author_id):
+    data = await _handle_upload(files, author_id,
+                                post_content_folder, post_id=post_id)
+    new_image = [PostImage(**item) for item in data]
+    session.add_all(new_image)

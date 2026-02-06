@@ -1,16 +1,27 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useFetch} from "../hooks/fetch";
 import {useModal} from '../hooks/modalProvider'
 import { FiImage } from "react-icons/fi";
 
 
-const PostPublisherForm = () => {
+const config = {
+    post: {
+        textareaPlaceholder: "Что нового?",
+        buttonPlaceholder: "Опубликовать"
+    },
+    comment: {
+        textareaPlaceholder: "Ответить",
+        buttonPlaceholder: "Опубликовать"
+    }
+}
+
+
+const PublishForm = ({type, onSubmit}) => {
+    const { textareaPlaceholder, buttonPlaceholder } = config[type];
     const [postText, setPostText] = useState('');
     const [selectedFiles, setSelectedFiles] = useState([]);
     const textareaRef = useRef(null);
     const postPushBtn = useRef(null);
     const fileInputRef = useRef(null);
-    const { executeFetch } = useFetch();
     const {handleCloseModal} = useModal();
 
     useEffect(() => {
@@ -30,14 +41,10 @@ const PostPublisherForm = () => {
             formData.append('data', fileObj.file);
         });
 
-        try {
-            executeFetch('post', 'post/create_post', formData)
-            setSelectedFiles([]);
-            setPostText("");
-            handleCloseModal()
-        } catch (error) {
-            console.error(error);
-        }
+        onSubmit(formData);
+        setSelectedFiles([]);
+        setPostText("");
+        handleCloseModal();
     };
 
     const handleFileChange = (e) => {
@@ -106,7 +113,7 @@ const PostPublisherForm = () => {
             className="w-full resize-none border-0 focus:ring-0 text-lg
                 placeholder-gray-500 focus:outline-none overflow-hidden"
             rows="1"
-            placeholder="Что нового?"
+            placeholder={textareaPlaceholder}
             value={postText}
             maxLength={256}
             onChange={(e) => {handlePostChange(e)}}
@@ -138,10 +145,10 @@ const PostPublisherForm = () => {
                         : 'bg-blue-200 text-white cursor-not-allowed'
                 }`}
             >
-                Опубликовать
+                {buttonPlaceholder}
             </button>
         </div>
     </div>
 }
 
-export default PostPublisherForm;
+export default PublishForm;

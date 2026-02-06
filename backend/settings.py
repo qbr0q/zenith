@@ -27,4 +27,5 @@ REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 BLOCK_TIMEOUT = 1
 REDIS_QUEUE = os.getenv('REDIS_QUEUE', 'action_queue')
 
-post_content_folder = "app/media/uploads"
+post_content_folder = "app/media/uploads/post_media"
+comment_content_folder = "app/media/uploads/comment_media"
