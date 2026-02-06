@@ -42,6 +42,7 @@ class CommentSchema(BaseModel):
     author: Optional[AuthorSchema] | None
     comments: List["CommentSchema"] = []
     likes: List["CommentLikeSchema"] | None = []
+    image: List["PostImageSchema"] | None = []
 
     model_config = ConfigDict(from_attributes=True)
 

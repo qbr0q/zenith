@@ -45,12 +45,12 @@ export const useFetch = () => {
                 if (errorDetail === "AUTH_REQUIRED" || errorDetail === "TOKEN_EXPIRED") {
                     try {
                         await refreshAccessToken();
-                        return await executeFetch(method, endpoint, data);
                     } catch (refreshErr) {
-                        const errorMessage = "Сессия истекла, войдите снова";
+                        const errorMessage = getErrorMessage(refreshErr);
                         setError(errorMessage);
                         throw new Error(errorMessage);
                     }
+                    return await executeFetch(method, endpoint, data);
                 }
             }
 

@@ -38,7 +38,7 @@ const SocialActions = ({content}) => {
         </div>
 
         {isCommentOpen && (
-            <CommentForm user={user}/>
+            <CommentForm content={content} onClose={() => setIsCommentOpen(false)} />
         )}
     </>
 }

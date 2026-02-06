@@ -1,7 +1,18 @@
 import { usePostPublisherForm } from '../../hooks/forms'
+import { useFetch } from "../../hooks/fetch";
 
 const PostPublisher = () => {
-    const openPostPublisherForm = usePostPublisherForm();
+    const { executeFetch } = useFetch();
+
+    const onSubmit = (formData) => {
+        try {
+            executeFetch('post', "post/create_post", formData)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const openPostPublisherForm = usePostPublisherForm(onSubmit);
 
     return (<>
         <div className="flex flex-col min-w-0 bg-white rounded-xl">

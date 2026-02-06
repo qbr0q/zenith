@@ -1,7 +1,7 @@
 import { formatTimeAgo } from "../utils";
 
 
-const UserAvatar = ({create_date}) => {
+const FormatTime = ({create_date}) => {
     return <>
         <span className="font-thin text-[13px]"
               title={new Date(create_date).toLocaleString()}
@@ -11,4 +11,4 @@ const UserAvatar = ({create_date}) => {
     </>
 }
 
-export default UserAvatar
+export default FormatTime

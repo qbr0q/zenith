@@ -13,6 +13,31 @@ export const useSocketHandlers = (socket) => {
             });
         };
 
+        const handleNewComment = (newComment) => {
+            queryClient.setQueryData(['posts'], (oldPosts) => {
+                if (!oldPosts) return [];
+
+                return oldPosts.map(post => {
+                    // Ищем пост, к которому относится комментарий
+                    if (post.id !== newComment.post_id) return post;
+
+                    // Если это корневой комментарий (нет родителя)
+                    if (!newComment.parent_id) {
+                        return {
+                            ...post,
+                            comments: [newComment, ...(post.comments || [])]
+                        };
+                    }
+
+                    // Если это ответ на другой комментарий — запускаем рекурсию
+                    return {
+                        ...post,
+                        comments: updateCommentsRecursively(post.comments || [], newComment)
+                    };
+                });
+            });
+        };
+
         const handleLikePost = (likedPost) => {
             queryClient.setQueryData(['posts'], (oldData) => {
                 return oldData.map((post) =>
@@ -85,6 +110,7 @@ export const useSocketHandlers = (socket) => {
         }
 
         socket.on('new_post', handleNewPost);
+        socket.on('new_comment', handleNewComment);
         socket.on('likePost_update', handleLikePost);
         socket.on('likeComment_update', handleLikeComment);
         socket.on("delete_post", handleDeletePost);
@@ -92,7 +118,9 @@ export const useSocketHandlers = (socket) => {
 
         return () => {
             socket.off('new_post', handleNewPost);
-            socket.off('like_update', handleLikePost);
+            socket.off('new_comment', handleNewComment);
+            socket.off('likePost_update', handleLikePost);
+            socket.off('likeComment_update', handleLikeComment);
             socket.off("delete_post", handleDeletePost);
             socket.off("delete_comment", handlerDeleteComment);
         };
@@ -110,4 +138,28 @@ const deleteRecursive = (comments, idToRemove) => {
             ...comment,
             "comments": comment.comments ? deleteRecursive(comment.comments, idToRemove) : []
         }));
+};
+
+const updateCommentsRecursively = (comments, newComment) => {
+    return comments.map(comment => {
+        // 1. Если этот комментарий и есть родитель нашего нового коммента
+        if (comment.id === newComment.parent_id) {
+            return {
+                ...comment,
+                // Добавляем в список детей (проверь название ключа: comments или children)
+                comments: [newComment, ...(comment.comments || [])]
+            };
+        }
+
+        // 2. Если у этого комментария есть свои дети, идем глубже
+        if (comment.comments && comment.comments.length > 0) {
+            return {
+                ...comment,
+                comments: updateCommentsRecursively(comment.comments, newComment)
+            };
+        }
+
+        // 3. Если ничего не нашли, возвращаем коммент как есть
+        return comment;
+    });
 };
