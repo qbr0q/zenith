@@ -10,7 +10,8 @@ const CommentForm = ({content, onClose}) => {
             const post_id = content.type === "post" ? content.id : content.post_id
             formData.append("post_id", post_id);
             if (content.type === "comment") {
-                formData.append("parent_id", content.id);
+                const parent_id = content.parent_id ? content.parent_id : content.id
+                formData.append("parent_id", parent_id);
             }
 
             executeFetch('post', 'social_action/create_comment', formData)
