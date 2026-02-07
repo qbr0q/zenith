@@ -26,6 +26,11 @@ const ContentItem = ({ item, isComment }) => {
 
     const openContent = (e, item) => {
         e.stopPropagation();
+        const ignoredTags = ['BUTTON', 'IMG', 'SPAN', 'TEXTAREA', 'INPUT'];
+
+        if (ignoredTags.includes(e.target.tagName) || e.target !== e.currentTarget) {
+            return
+        }
         navigate(`/@${item.author.username}/post/${item.slug}`)
     }
 

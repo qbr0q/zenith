@@ -7,7 +7,7 @@ const Repost = () => {
   const reposts = 0
 
   return (
-    <button className={buttonClasses} onClick={(e) => {e.stopPropagation()}}>
+    <button className={buttonClasses}>
         <FiRepeat />
         <span className={textClasses}>{reposts}</span>
     </button>

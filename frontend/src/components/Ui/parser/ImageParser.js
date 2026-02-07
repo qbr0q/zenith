@@ -37,10 +37,7 @@ const ImageParser = ({ type, images }) => {
     }
 
     return (
-        <div
-            className="relative group w-full overflow-hidden rounded-xl border border-gray-200 cursor-pointer"
-            onClick={(e) => {e.stopPropagation()}}
-        >
+        <div className="relative group w-full overflow-hidden rounded-xl border border-gray-200 cursor-pointer">
             {/* Контейнер со скроллом */}
             <div
                 ref={scrollRef}

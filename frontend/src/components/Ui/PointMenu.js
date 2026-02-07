@@ -11,8 +11,7 @@ function PointMenu({menuItems}) {
                     "cursor-pointer"
 
   // Обработчик для открытия/закрытия меню
-  const handleToggleMenu = (e) => {
-    e.stopPropagation();
+  const handleToggleMenu = () => {
     setIsOpen(prev => !prev);
   };
 
@@ -38,7 +37,6 @@ function PointMenu({menuItems}) {
   }
 
   const handleOnClick = (e, btnHandler) => {
-    e.stopPropagation();
     btnHandler();
     setIsOpen(false);
   }
