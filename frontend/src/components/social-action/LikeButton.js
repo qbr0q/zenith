@@ -18,7 +18,8 @@ const Like = ({content, user}) => {
         comment: updateCommentLikes
     }
 
-    const handleLike = async () => {
+    const handleLike = async (e) => {
+        e.stopPropagation();
         if (!user) {
             openLoginForm()
             return null

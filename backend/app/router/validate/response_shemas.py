@@ -38,6 +38,7 @@ class CommentSchema(BaseModel):
     deleted: bool
     type: str = "comment"
     is_liked: bool = None
+    slug: str
 
     author: Optional[AuthorSchema] | None
     comments: List["CommentSchema"] = []
@@ -60,6 +61,7 @@ class PostSchema(BaseModel):
     like_count: int
     type: str = "post"
     is_liked: bool = None
+    slug: str
 
     author: AuthorSchema
     comments: List[CommentSchema] | None

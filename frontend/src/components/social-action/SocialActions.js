@@ -20,7 +20,8 @@ const SocialActions = ({content}) => {
     const openLoginForm = useLoginForm()
     const user = getUser()
 
-    const handleCommentButton = () => {
+    const handleCommentButton = (e) => {
+        e.stopPropagation();
         if (user) {
             setIsCommentOpen(!isCommentOpen);
         } else {

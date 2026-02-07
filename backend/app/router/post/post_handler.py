@@ -6,7 +6,7 @@ from typing import List
 
 from app.database.utils import get_session
 from app.router.utils import get_current_user_id
-from app.router.post.utils import get_best_comment_branch, \
+from app.router.post.utils import get_comment_branch, \
     attach_post_images, get_feed_posts
 from app.database.models import Post, PostLike, Comment, PostImage
 from app.router.validate.response_shemas import PostSchema
@@ -29,7 +29,7 @@ def last_posts(
     for post_obj, is_liked in posts:
         validate_obj = PostSchema.model_validate(post_obj)
         validate_obj.is_liked = is_liked
-        validate_obj.comments = get_best_comment_branch(validate_obj.comments, validate_obj.like_count, user_id)
+        validate_obj.comments = get_comment_branch(validate_obj.comments)
         result.append(validate_obj)
     return result
 

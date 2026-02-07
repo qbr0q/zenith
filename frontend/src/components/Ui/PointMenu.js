@@ -11,7 +11,8 @@ function PointMenu({menuItems}) {
                     "cursor-pointer"
 
   // Обработчик для открытия/закрытия меню
-  const handleToggleMenu = () => {
+  const handleToggleMenu = (e) => {
+    e.stopPropagation();
     setIsOpen(prev => !prev);
   };
 
@@ -36,10 +37,10 @@ function PointMenu({menuItems}) {
     }
   }
 
-  const getOnClick = (e, btnHandler) => {
-    e.preventDefault();
-    btnHandler()
-    setIsOpen(false)
+  const handleOnClick = (e, btnHandler) => {
+    e.stopPropagation();
+    btnHandler();
+    setIsOpen(false);
   }
 
   return (
@@ -80,7 +81,7 @@ function PointMenu({menuItems}) {
             key={index}
             className={getItemStyle(menuItem.type)}
             role="menuitem"
-            onClick={(e) => {getOnClick(e, menuItem.handler)}}
+            onClick={(e) => {handleOnClick(e, menuItem.handler)}}
           >
             {menuItem.label}
           </span>

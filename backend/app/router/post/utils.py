@@ -42,6 +42,21 @@ def get_feed_posts(session, user_id, limit=15):
     return posts
 
 
+def get_comment_branch(comments):
+    comment_ids = {comment.id: comment for comment in comments}
+    comment_branch = []
+
+    for comment in comments:
+        if comment.parent_id:
+            parent = comment_ids.get(comment.parent_id)
+            parent.comments.append(comment)
+        else:
+            comment_branch.append(comment)
+
+    comment_branch_sorted = sorted(comment_branch, key=lambda x: x.create_date)
+    return comment_branch_sorted
+
+
 def get_best_comment_branch(comments, post_like_count, user_id):
     """
     Оставляет в списке только ветку самого залайканного комментария.
@@ -50,8 +65,8 @@ def get_best_comment_branch(comments, post_like_count, user_id):
         return []
 
     top_comment = max(comments, key=lambda x: x.like_count)
-    # if top_comment.like_count < post_like_count:
-    #     return []
+    if top_comment.like_count < post_like_count:
+        return []
     top_comment.is_liked = bool(top_comment.likes and [i for i in top_comment.likes if i.user_id == user_id])
 
     if top_comment.parent_id:

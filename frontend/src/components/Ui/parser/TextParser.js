@@ -50,6 +50,7 @@ const TextParser = ({ children }) => {
                     className="text-[green]"
                     onClick={(e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         alert(`Поиск по тегу: ${tag}`);
                     }}
                 >
