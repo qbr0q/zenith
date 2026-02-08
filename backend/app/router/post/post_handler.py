@@ -8,11 +8,10 @@ from app.database.utils import get_session
 from app.router.utils import get_current_user_id
 from app.router.post.utils import get_comment_branch, \
     attach_post_images, get_feed_posts
-from app.database.models import Post, PostLike, Comment, PostImage
+from app.database.models import Post
 from app.router.validate.response_shemas import PostSchema
 from app.router.validate.request_schemas import DeletePostRequest
 from app.websocket import sio
-from settings import post_content_folder
 
 
 router = APIRouter(prefix='/post', tags=["Post"])
@@ -29,7 +28,7 @@ def last_posts(
     for post_obj, is_liked in posts:
         validate_obj = PostSchema.model_validate(post_obj)
         validate_obj.is_liked = is_liked
-        validate_obj.comments = get_comment_branch(validate_obj.comments)
+        validate_obj.comments = get_comment_branch(validate_obj.comments, user_id)
         result.append(validate_obj)
     return result
 

@@ -2,7 +2,7 @@ from sqlmodel import select, exists, and_
 from sqlalchemy.orm import contains_eager
 
 from app.database.models import Post, PostLike, \
-    Comment, PostImage
+    Comment, PostImage, CommentLike
 from app.router.utils import _handle_upload
 from settings import post_content_folder
 
@@ -42,8 +42,9 @@ def get_feed_posts(session, user_id, limit=15):
     return posts
 
 
-def get_comment_branch(comments):
-    comment_ids = {comment.id: comment for comment in comments}
+def get_comment_branch(comments, user_id):
+    comment_ids = {comment.id: setIsLike(comment, user_id)
+                   for comment in comments}
     comment_branch = []
 
     for comment in comments:
@@ -55,6 +56,11 @@ def get_comment_branch(comments):
 
     comment_branch_sorted = sorted(comment_branch, key=lambda x: x.create_date)
     return comment_branch_sorted
+
+
+def setIsLike(comment, user_id):
+    comment.is_liked = user_id in [i.user_id for i in comment.likes]
+    return comment
 
 
 def get_best_comment_branch(comments, post_like_count, user_id):
