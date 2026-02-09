@@ -4,12 +4,14 @@ services:
   # --- БАЗА ДАННЫХ ---
   db:
     image: postgres:17
+    environment:
+      - TZ=Europe/Moscow
     container_name: zenith_db
     restart: always
     env_file:
       - ./backend/config.env
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Чтобы данные не удалялись при стопе
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5433:5432"
 
@@ -28,9 +30,11 @@ services:
     restart: always
     env_file:
       - ./backend/config.env
+    volumes:
+      - ./backend/app/media:/app/app/media
     environment:
-      # ВАЖНО: теперь бэк ищет базу по имени сервиса 'db'
-      - DB_HOST=db
+      - TZ=Europe/Moscow
+      - POSTGRES_HOST=db
       - REDIS_HOST=redis
     depends_on:
       - db
