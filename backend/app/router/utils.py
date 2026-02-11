@@ -35,6 +35,23 @@ async def get_current_user_id(request: Request):
         )
 
 
+async def get_optional_user_id(request: Request):
+    token_name = security.config.JWT_ACCESS_COOKIE_NAME
+    token = request.cookies.get(token_name)
+
+    if not token:
+        return None
+
+    try:
+        access_token = await security.get_access_token_from_request(
+            request
+        )
+        payload = security.verify_token(access_token, verify_csrf=False)
+        return payload.sub
+    except Exception:
+        return None
+
+
 async def save_image(upload_file, media_folder) -> str:
     extension = os.path.splitext(upload_file.filename)[1].lower()
     unique_name = f"{uuid.uuid4()}{extension}"

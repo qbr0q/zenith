@@ -12,10 +12,10 @@ from app.router.auth.utils import get_user_by_main, create_access_token, \
 from settings import security
 
 
-router = APIRouter(prefix='/auth', tags=["Auth"])
+router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-@router.post('/login')
+@router.post("/login")
 async def login(
     data: LoginRequest,
     response: Response,
@@ -42,7 +42,7 @@ async def login(
     return response_user
 
 
-@router.post('/signup')
+@router.post("/signup")
 def sign_up(
     data: SignUpRequest,
     response: Response,
@@ -80,7 +80,7 @@ def sign_up(
     return response_user
 
 
-@router.post('/refresh_token')
+@router.post("/refresh_token")
 async def refresh_token(request: Request, response: Response):
     token_name = security.config.JWT_REFRESH_COOKIE_NAME
     token = request.cookies.get(token_name)

@@ -1,11 +1,11 @@
 import MainLayout from "../MainLayout";
-import MainPost from './MainPost';
+import Post from "./Post";
 
 
 const MainPage = () => {
     return (
         <MainLayout>
-            <MainPost />
+            <Post />
         </MainLayout>
     )
 }

@@ -19,17 +19,15 @@ const EntryPointMenu = ({content}) => {
 
         const config = {
             post: {
-                url: 'post/delete_post',
-                payload: { post_id: content.id }
+                url: `posts/${content.id}/`
             },
             comment: {
-                url: 'social_action/delete_comment',
-                payload: { comment_id: content.id }
+                url: `social_action/delete_comment/${content.id}/`
             }
         };
-        const { url, payload } = config[content.type];
+        const { url } = config[content.type];
         try {
-            await executeFetch('delete', url, payload)
+            await executeFetch('delete', url)
         } catch (err) {
             console.error(err)
         }
