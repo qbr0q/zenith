@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException,\
 from sqlmodel import select, or_, Session
 from typing import List
 
-from app.router.validate.request_schemas import LikeRequest, DeleteCommentRequest
+from app.router.validate.request_schemas import LikeRequest
 from app.router.validate.response_shemas import CommentSchema
 from app.database.models import Comment
 from app.database.utils import get_session
@@ -15,10 +15,10 @@ from app.router.social_action.utils import attach_comment_images
 from app.websocket import sio
 
 
-router = APIRouter(prefix='/social_action', tags=["SocialAction"])
+router = APIRouter(prefix="/social_action", tags=["SocialAction"])
 
 
-@router.post('/like')
+@router.post("/like")
 @check_redis_health
 async def like(
     data: LikeRequest,
@@ -38,7 +38,7 @@ async def like(
     push_to_queue(task_payload)
 
 
-@router.post('/create_comment')
+@router.post("/create_comment")
 async def create_comment(
     parent_id: int | None = Form(default=None),
     post_id: int = Form(...),
@@ -57,22 +57,20 @@ async def create_comment(
 
         comment_json = json.loads(CommentSchema.model_validate(new_comment).model_dump_json())
 
-        await sio.emit('new_comment', comment_json)
+        await sio.emit("new_comment", comment_json)
 
-        return {'status': 'success'}
+        return {"status": "success"}
 
     except Exception as e:
         session.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.delete('/delete_comment')
+@router.delete("/delete_comment/{comment_id}/")
 async def delete_comment(
-    data: DeleteCommentRequest,
+    comment_id: int | None,
     session: Session = Depends(get_session)
 ):
-    comment_id = data.comment_id
-
     statement = select(
         Comment
     ).filter(or_(
@@ -87,4 +85,4 @@ async def delete_comment(
     comment_delete = max(comments, key=lambda x: x.parent_id is None)
     socket_data = {"id": comment_delete.id, "post_id": comment_delete.post_id}
 
-    await sio.emit('delete_comment', socket_data)
+    await sio.emit("delete_comment", socket_data)

@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlmodel import select, exists, and_
 from sqlalchemy.orm import contains_eager
 
@@ -5,6 +6,24 @@ from app.database.models import Post, PostLike, \
     Comment, PostImage, CommentLike
 from app.router.utils import _handle_upload
 from settings import post_content_folder
+
+
+def get_base_post_statement(user_id: int):
+    is_liked_stmt = (
+        exists()
+        .where(PostLike.post_id == Post.id)
+        .where(PostLike.user_id == user_id)
+        .correlate(Post)
+    ).label("is_liked")
+
+    statement = (
+        select(Post, is_liked_stmt)
+        .outerjoin(Comment, and_(Comment.post_id == Post.id, Comment.deleted == False))
+        .outerjoin(PostImage, PostImage.post_id == Post.id)
+        .filter(Post.deleted == False)
+        .options(contains_eager(Post.comments))
+    )
+    return statement
 
 
 def get_feed_posts(session, user_id, limit=15):
@@ -16,30 +35,22 @@ def get_feed_posts(session, user_id, limit=15):
         .subquery()
     )
 
-    is_liked_stmt = (
-        exists()
-        .where(PostLike.post_id == Post.id)
-        .where(PostLike.user_id == user_id)
-        .correlate(Post)
-    ).label("is_liked")
-
     statement = (
-        select(Post, is_liked_stmt)
+        get_base_post_statement(user_id)
         .join(subq, Post.id == subq.c.id)
-        .outerjoin(Comment, and_(
-            Comment.post_id == Post.id,
-            Comment.deleted == False
-        ))
-        .outerjoin(
-            PostImage, PostImage.post_id == Post.id
-        ).options(
-            contains_eager(Post.comments)
-        )
         .order_by(Post.create_date.desc())
     )
 
     posts = session.exec(statement).unique().all()
     return posts
+
+
+def get_post_by_slug(session, post_slug, user_id):
+    try:
+        statement = get_base_post_statement(user_id).where(Post.slug == post_slug)
+        return session.exec(statement).unique().first()
+    except Exception as e:
+        raise HTTPException(500, str(e))
 
 
 def get_comment_branch(comments, user_id):

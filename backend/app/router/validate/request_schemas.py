@@ -15,11 +15,3 @@ class SignUpRequest(BaseModel):
 class LikeRequest(BaseModel):
     post_id: int
     type: str
-
-
-class DeletePostRequest(BaseModel):
-    post_id: int
-
-
-class DeleteCommentRequest(BaseModel):
-    comment_id: int

@@ -1,6 +1,6 @@
 const Logo = () => {
     const goMainPage = () => {
-        if (!window.location.href === "/") {
+        if (window.location.href !== "/") {
             window.location.href = "/";
         }
     }

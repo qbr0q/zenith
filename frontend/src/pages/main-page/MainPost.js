@@ -3,6 +3,7 @@ import { useSocketHandlers } from '../../hooks/socketHandlers';
 import { getUser, socket } from '../../components/utils'
 import Post from '../../components/ui/entry-ui/ContentContainer'
 import PostPublisher from '../../components/post-component/PostPublisher'
+import PostSkeleton from '../../components/ui/PostSkeleton'
 import { useQuery } from '@tanstack/react-query';
 
 
@@ -14,22 +15,27 @@ const MainPost = () => {
     const { data: posts, isLoading, error } = useQuery({
         queryKey: ['posts'],
         queryFn: async () => {
-            const url_userId = user ? `?user_id=${user.id}` : '';
-            return await executeFetch('get', `post/last_posts${url_userId}`);
+            return await executeFetch('get', "posts/");
         },
         // Данные не будут считаться "старыми" 5 минут, пока не прилетит сокет или мы не обновим вручную
         staleTime: 1000 * 60 * 5, 
     });
 
     if (isLoading) {
-        return <div className="text-xl">Загрузка постов...</div>;
+        return (
+            <div className="space-y-4">
+                {Array.from({ length: 10 }).map((_, index) => (
+                    <PostSkeleton key={index} />
+                ))}
+            </div>
+        );
     }
 
     if (error) {
         return <div className="text-red-500">{error.message}</div>;
     }
 
-    return <div className='bg-white rounded-xl border'>
+    return <div>
         {user ? <PostPublisher/> : null}
         <Post contentItems={posts}/>
     </div>

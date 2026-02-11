@@ -1,6 +1,8 @@
 export const updatePostLikes = async (queryClient, content, isLiked) => {
     const postId = content.id;
     queryClient.setQueryData(['posts'], (oldData) => {
+        if (!oldData) return [];
+
         return oldData.map(post =>
             post.id === postId
                 ? { ...post, like_count: isLiked ? post.like_count - 1 : post.like_count + 1 }
