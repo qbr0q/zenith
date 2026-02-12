@@ -24,21 +24,21 @@ const ContentContainer = ({ contentItems, isComment = false }) => {
 const ContentItem = ({ item, isComment }) => {
     const navigate = useNavigate();
 
-    const openContent = (e, item) => {
+    const openContent = (e, slug) => {
         e.stopPropagation();
         const ignoredTags = ['BUTTON', 'IMG', 'SPAN', 'TEXTAREA', 'INPUT'];
 
         if (ignoredTags.includes(e.target.tagName) || e.target !== e.currentTarget) {
             return
         }
-        navigate(`/@${item.author.username}/post/${item.slug}`)
+        navigate(`/@${item.author.username}/post/${slug}`, { state: { fromMain: true } })
     }
 
     return (
         <div
             className={`flex flex-col gap-4 whitespace-pre-wrap break-words cursor-pointer
             ${!isComment ? 'px-8 py-6' : 'mt-6'}`}
-            onClick={(e) => {openContent(e, item)}}
+            onClick={(e) => {openContent(e, item.slug)}}
         >
             <ContentAuthor content={item} />
             <TextParser children={item.text} />
