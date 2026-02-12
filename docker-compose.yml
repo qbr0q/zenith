@@ -42,6 +42,16 @@ services:
     ports:
       - "8080:8080"
 
+  # --- БОТЫ ---
+  bot_service:
+    build: ./backend/bot_service
+    container_name: zenith_bots
+    environment:
+      - API_URL=http://backend:8080/api
+    restart: always
+    depends_on:
+      - backend
+
   # --- ФРОНТЕНД ---
   frontend:
     build: ./frontend
