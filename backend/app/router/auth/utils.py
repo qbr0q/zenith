@@ -1,12 +1,17 @@
 from fastapi import Response
-from sqlmodel import select, Session
+from sqlmodel import select, Session, or_
 
 from app.database.models import User
 from settings import security
 
 
-def get_user_by_main(session: Session, mail: str):
-    statement = select(User).filter(User.mail == mail)
+def find_user(session: Session, login_data: str):
+    statement = select(User).filter(
+        or_(
+            User.mail == login_data,
+            User.username == login_data,
+        )
+    )
     query = session.exec(statement)
     user = query.first()
 

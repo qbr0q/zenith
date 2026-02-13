@@ -9,6 +9,7 @@ from settings import config_name
 
 
 def run_bots():
+    sleep(5) # на случай, если запускается с основным сервисом - ждем его инициализацию
     with open(config_name) as file:
         bots_config = json.load(file)
 
@@ -30,7 +31,7 @@ def bot_worker(bot_config):
             action = choice(bot_actions)
             action(bot)
 
-            sleep(uniform(5, 7))
+            sleep(uniform(3, 12))
         except Exception as e:
             print(f"Bot action error: {str(e)}")
             sleep(3)
