@@ -32,7 +32,7 @@ const MainPost = () => {
     }
 
     if (error) {
-        return <div className="text-red-500">{error.message}</div>;
+        return <div className="flex flex-col text-red-500 mt-8 text-3xl items-center">{error.message}</div>;
     }
 
     return <div>

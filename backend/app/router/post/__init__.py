@@ -1,1 +1,1 @@
-from .post_handler import router
+from .router import router

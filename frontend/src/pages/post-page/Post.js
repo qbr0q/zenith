@@ -28,7 +28,7 @@ const Post = () => {
     if (!post || error) {
         return <div className="flex flex-col text-red-500 mt-8 text-3xl items-center">
             <p>{error || "Пост не найден"}</p>
-            </div>
+        </div>
     }
 
     return <ContentContainer contentItems={[post]} />
