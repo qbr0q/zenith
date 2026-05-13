@@ -3,12 +3,16 @@ import redis
 import json
 import threading
 
+from app.core import config
 from app.redis_queues.processor import process_like_post, process_like_comment
-from settings import REDIS_HOST, REDIS_PORT, REDIS_QUEUE, BLOCK_TIMEOUT
 
 
 try:
-    redis_db = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
+    redis_db = redis.Redis(
+        host=config.redis.host,
+        port=config.redis.port,
+        db=0
+    )
     redis_db.ping()
     print("Успешное подключение к Redis.")
 except redis.exceptions.ConnectionError as e:

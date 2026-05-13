@@ -5,11 +5,11 @@ from authx.exceptions import JWTDecodeError
 
 from app.database.utils import get_session
 from app.database.models import User, UserInfo
+from app.router.deps import security
 from app.router.validate.request_schemas import LoginRequest, SignUpRequest
 from app.router.validate.validate_form import validate_login, validate_signup
 from app.router.auth.utils import find_user, create_access_token, \
     create_refresh_token, set_access_token, set_refresh_token, get_response_user
-from settings import security
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])

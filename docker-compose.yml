@@ -9,7 +9,7 @@ services:
     container_name: zenith_db
     restart: always
     env_file:
-      - ./backend/config.env
+      - ./backend/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -29,7 +29,7 @@ services:
     container_name: zenith_backend
     restart: always
     env_file:
-      - ./backend/config.env
+      - ./backend/.env
     volumes:
       - ./backend/app/media:/app/app/media
     environment:
@@ -44,7 +44,9 @@ services:
 
   # --- БОТЫ ---
   bot_service:
-    build: ./backend/bot_service
+    build:
+      context: ./backend
+      dockerfile: app/bot_service/Dockerfile
     container_name: zenith_bots
     environment:
       - API_URL=http://backend:8080/api
