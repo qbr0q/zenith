@@ -2,10 +2,10 @@ from fastapi import HTTPException
 from sqlmodel import select, exists, and_
 from sqlalchemy.orm import contains_eager
 
+from app.core import settings
 from app.database.models import Post, PostLike, \
-    Comment, PostImage, CommentLike
+    Comment, PostImage
 from app.router.utils import _handle_upload
-from settings import post_content_folder
 
 
 def get_base_post_statement(user_id: int):
@@ -100,6 +100,6 @@ def get_best_comment_branch(comments, post_like_count, user_id):
 
 async def attach_post_images(session, files, post_id, author_id):
     data = await _handle_upload(files, author_id,
-                                post_content_folder, post_id=post_id)
+                                settings.source.post_content, post_id=post_id)
     new_image = [PostImage(**item) for item in data]
     session.add_all(new_image)

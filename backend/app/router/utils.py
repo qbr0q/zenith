@@ -4,7 +4,7 @@ import shutil
 from fastapi import Request, HTTPException
 from authx.exceptions import JWTDecodeError
 
-from settings import security
+from .deps import security
 
 
 async def get_current_user_id(request: Request):
