@@ -1,7 +1,8 @@
+import json
+import time
+import threading
 import asyncio
 import redis
-import json
-import threading
 
 from app.core import config
 from app.redis_queues.processor import process_like_post, process_like_comment
@@ -25,7 +26,9 @@ async def run_redis_worker():
         return None
     while True:
         try:
-            item = redis_db.blpop(REDIS_QUEUE, timeout=BLOCK_TIMEOUT)
+            item = redis_db.blpop(
+                config.redis.action_queue, timeout=config.redis.timeout
+            )
             if item:
                 message = item[1]
                 task_data = json.loads(message)
@@ -37,6 +40,7 @@ async def run_redis_worker():
 
         except Exception as e:
             print(f"Критическая ошибка воркера: {e}.")
+            time.sleep(config.redis.timeout)
 
 
 def run_async_in_thread():

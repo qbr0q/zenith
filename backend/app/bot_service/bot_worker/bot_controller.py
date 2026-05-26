@@ -3,14 +3,13 @@ import threading
 from time import sleep
 from random import choice, uniform
 
-from .bot import CommunityBot
-from .utils import bot_actions
-from settings import config_name
+from app.core import settings
+from app.bot_service.bot_worker.bot import CommunityBot
+from app.bot_service.bot_worker.utils import bot_actions
 
 
 def run_bots():
-    sleep(5) # на случай, если запускается с основным сервисом - ждем его инициализацию
-    with open(config_name) as file:
+    with open(settings.bot.accounts_source) as file:
         bots_config = json.load(file)
 
     threads = []

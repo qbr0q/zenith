@@ -14,9 +14,14 @@ class PathSettings(BaseModel):
     comment_content: str
 
 
+class BotSettings(BaseModel):
+    accounts_source: str
+
+
 class Settings(YamlBaseSettings):
     server: ServerSettings
     source: PathSettings
+    bot: BotSettings
 
     model_config = SettingsConfigDict(
         yaml_file="settings.yml"

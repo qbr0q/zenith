@@ -1,14 +1,28 @@
 import requests
 
-from settings import BASE_API
+from app.core import settings
 
 
 class CommunityBot:
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.session = self.get_session()
-        self.base_url = BASE_API
+        self._session = None
+        self._base_url = None
+
+    @property
+    def base_url(self):
+        if not self._base_url:
+            base_url = f"http://{settings.server.host}:{settings.server.port}/api"
+            self._base_url = base_url
+        return self._base_url
+
+    @property
+    def session(self):
+        if not self._session:
+            session = self.get_session()
+            self._session = session
+        return self._session
 
     @staticmethod
     def get_session():

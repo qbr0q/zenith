@@ -53,6 +53,8 @@ services:
     restart: always
     depends_on:
       - backend
+    profiles:
+      - bots
 
   # --- ФРОНТЕНД ---
   frontend:
