@@ -6,6 +6,9 @@ services:
     image: postgres:17
     environment:
       - TZ=Europe/Moscow
+      - POSTGRES_USER=${DB__USER}
+      - POSTGRES_PASSWORD=${DB__PASSWORD}
+      - POSTGRES_DB=${DB__NAME}
     container_name: zenith_db
     restart: always
     env_file:
@@ -13,7 +16,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "5435:5432"
 
   # --- РЕДИС ---
   redis:
@@ -64,7 +67,7 @@ services:
     container_name: zenith_frontend
     restart: always
     ports:
-      - "3000:80"
+      - "80:80"
     depends_on:
       - backend
 
