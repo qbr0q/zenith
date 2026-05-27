@@ -1,4 +1,4 @@
-from content import texts
+from app.bot_service.content import texts
 
 from random import choice
 

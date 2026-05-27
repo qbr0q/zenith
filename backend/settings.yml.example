@@ -5,3 +5,5 @@ server:
 source:
   post_content: path
   comment_content: path
+bot:
+  accounts_source: file-name

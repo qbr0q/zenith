@@ -50,6 +50,8 @@ services:
     container_name: zenith_bots
     environment:
       - API_URL=http://backend:8080/api
+    env_file:
+      - ./backend/.env
     restart: always
     depends_on:
       - backend

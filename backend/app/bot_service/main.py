@@ -1,4 +1,4 @@
-from bot_worker.bot_controller import run_bots
+from app.bot_service.bot_worker.bot_controller import run_bots
 
 
 if __name__ == "__main__":

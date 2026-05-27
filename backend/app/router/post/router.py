@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter, Depends, HTTPException,\
     UploadFile, File, Form
 from sqlmodel import select, Session
-from typing import List
+from typing import List, Optional
 
 from app.database.utils import get_session
 from app.router.utils import get_current_user_id, get_optional_user_id
@@ -47,7 +47,7 @@ def post_by_id(
 
 @router.post("/")
 async def create_post(
-    text: str = Form(...),
+    text: Optional[str] = Form(None),
     data: List[UploadFile] = File(None),
     session: Session = Depends(get_session),
     user_id: int = Depends(get_current_user_id)
