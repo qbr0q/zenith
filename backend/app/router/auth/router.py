@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Response, \
     HTTPException, Request
-from sqlmodel import Session
 from authx.exceptions import JWTDecodeError
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.utils import get_session
 from app.database.models import User, UserInfo
@@ -19,12 +19,12 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 async def login(
     data: LoginRequest,
     response: Response,
-    session: Session = Depends(get_session)
+    session: AsyncSession = Depends(get_session)
 ):
     mail = data.mail
     password = data.password
 
-    user = find_user(session, mail)
+    user = await find_user(session, mail)
 
     err_code, err_detail = validate_login(user, mail, password)
     if err_code and err_detail:
@@ -43,10 +43,10 @@ async def login(
 
 
 @router.post("/signup")
-def sign_up(
+async def sign_up(
     data: SignUpRequest,
     response: Response,
-    session: Session = Depends(get_session)
+    session: AsyncSession = Depends(get_session)
 ):
     mail = data.mail
     password = data.password
@@ -57,22 +57,23 @@ def sign_up(
         raise HTTPException(err_code, err_detail)
 
     try:
-        user = User(mail=data.mail, username=data.username, password=data.password)
+        user = User(
+            mail=data.mail,
+            username=data.username,
+            password=data.password,
+            info=UserInfo()
+        )
         session.add(user)
-        session.flush()
-        user_id = user.id
+        await session.flush()
 
-        user_info = UserInfo(user_id=user_id)
-        session.add(user_info)
-        session.commit()
-
-        access_token = create_access_token(user_id)
-        refresh_token = create_refresh_token(user_id)
+        access_token = create_access_token(user.id)
+        refresh_token = create_refresh_token(user.id)
 
         set_access_token(response, access_token)
         set_refresh_token(response, refresh_token)
+        await session.commit()
     except Exception as e:
-        session.rollback()
+        await session.rollback()
         raise HTTPException(500, str(e))
 
     response_user = get_response_user(user)

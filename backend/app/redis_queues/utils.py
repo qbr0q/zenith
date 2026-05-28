@@ -6,9 +6,9 @@ from app.core import config
 from app.redis_queues import redis_db
 
 
-def push_to_queue(task_payload):
+async def push_to_queue(task_payload):
     try:
-        redis_db.rpush(config.redis.action_queue, json.dumps(task_payload))
+        await redis_db.rpush(config.redis.action_queue, json.dumps(task_payload))
     except Exception as e:
         print(f"Критическая ошибка при публикации: {e}")
         raise HTTPException(500, "Не удалось отправить задачу в очередь.")

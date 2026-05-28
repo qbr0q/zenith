@@ -2,8 +2,9 @@ import uuid
 import json
 from fastapi import APIRouter, HTTPException,\
     Depends, Form, UploadFile, File
-from sqlmodel import select, or_, Session
+from sqlmodel import select, or_
 from typing import List
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.router.validate.request_schemas import LikeRequest
 from app.router.validate.response_shemas import CommentSchema
@@ -35,7 +36,7 @@ async def like(
         "type": data.type
     }
 
-    push_to_queue(task_payload)
+    await push_to_queue(task_payload)
 
 
 @router.post("/create_comment")
@@ -44,7 +45,7 @@ async def create_comment(
     post_id: int = Form(...),
     text: str = Form(...),
     data: List[UploadFile] = File(None),
-    session: Session = Depends(get_session),
+    session: AsyncSession = Depends(get_session),
     user_id: int = Depends(get_current_user_id)
 ):
     try:
@@ -69,7 +70,7 @@ async def create_comment(
 @router.delete("/delete_comment/{comment_id}/")
 async def delete_comment(
     comment_id: int | None,
-    session: Session = Depends(get_session)
+    session: AsyncSession = Depends(get_session)
 ):
     statement = select(
         Comment

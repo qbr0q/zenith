@@ -1,15 +1,15 @@
 import json
-import time
 import threading
 import asyncio
-import redis
+from contextlib import asynccontextmanager
+import redis.asyncio as aioredis
 
 from app.core import config
 from app.redis_queues.processor import process_like_post, process_like_comment
 
 
 try:
-    redis_db = redis.Redis(
+    redis_db = aioredis.Redis(
         host=config.redis.host,
         port=config.redis.port,
         db=0
@@ -26,7 +26,7 @@ async def run_redis_worker():
         return None
     while True:
         try:
-            item = redis_db.blpop(
+            item = await redis_db.blpop(
                 config.redis.action_queue, timeout=config.redis.timeout
             )
             if item:
@@ -40,7 +40,25 @@ async def run_redis_worker():
 
         except Exception as e:
             print(f"Критическая ошибка воркера: {e}.")
-            time.sleep(config.redis.timeout)
+            await asyncio.sleep(config.redis.timeout)
+
+
+@asynccontextmanager
+async def lifespan(app):
+    # ---- НА СТАРТЕ ПРИЛОЖЕНИЯ ----
+    # asyncio.create_task запускает корутину в фоне ТЕКУЩЕГО лупа FastAPI
+    worker_task = asyncio.create_task(run_redis_worker())
+    print("Фоновый асинхронный воркер успешно запущен в общем лупе.")
+
+    yield
+
+    # ---- ПРИ ВЫКЛЮЧЕНИИ ПРИЛОЖЕНИЯ ----
+    print("Останавливаем воркер...")
+    worker_task.cancel()  # Мягко глушим задачу
+    try:
+        await worker_task
+    except asyncio.CancelledError:
+        print("Воркер успешно остановлен.")
 
 
 def run_async_in_thread():

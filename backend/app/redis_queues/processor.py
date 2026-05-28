@@ -1,5 +1,6 @@
 from sqlmodel import select, Session, update
 
+from app.database import SessionLocal
 from app.database.models import Post, PostLike, Comment, CommentLike
 from app.websocket import sio
 from app.database import engine
@@ -8,7 +9,7 @@ from app.database import engine
 async def process_like_post(
     task_data: dict
 ):
-    session = Session(engine)
+    session = SessionLocal()
     user_id = task_data.get('user_id')
     post_id = task_data.get('post_id')
 
@@ -19,29 +20,31 @@ async def process_like_post(
             PostLike.user_id == user_id,
             PostLike.post_id == post_id
         )
-        post_like_record = session.exec(statement).first()
+        post_like_record = await session.exec(statement)
+        post_like = post_like_record.first()
         like_count = 0
-        if post_like_record:
-            session.delete(post_like_record)
+        if post_like:
+            await session.delete(post_like)
             like_count -= 1
         else:
-            post_like_record = PostLike(post_id=post_id, user_id=user_id)
-            session.add(post_like_record)
+            post_like = PostLike(post_id=post_id, user_id=user_id)
+            session.add(post_like)
             like_count += 1
 
         update_stmt = update(Post).where(Post.id == post_id).values(
             like_count=Post.like_count + like_count
         )
-        session.execute(update_stmt)
-        session.commit()
+        await session.execute(update_stmt)
+        await session.commit()
 
-        post_record = session.exec(select(Post).filter(Post.id == post_id)).first()
-        await sio.emit('likePost_update', {"id": post_record.id, "likeCount": post_record.like_count})
+        post_record = await session.exec(select(Post).filter(Post.id == post_id))
+        post = post_record.first()
+        await sio.emit('likePost_update', {"id": post.id, "likeCount": post.like_count})
     except Exception as e:
-        session.rollback()
+        await session.rollback()
         print(f"Ошибка транзакции для поста {post_id}: {e}")
     finally:
-        session.close()
+        await session.close()
 
 
 async def process_like_comment(
@@ -71,7 +74,7 @@ async def process_like_comment(
         update_stmt = update(Comment).where(Comment.id == comment_id).values(
             like_count=Comment.like_count + like_count
         )
-        session.execute(update_stmt)
+        await session.execute(update_stmt)
         session.commit()
 
         comment_record = session.exec(select(Comment).filter(Comment.id == comment_id)).first()

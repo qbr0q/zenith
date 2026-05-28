@@ -22,7 +22,7 @@ async def get_current_user_id(request: Request):
             request
         )
         payload = security.verify_token(access_token, verify_csrf=False)
-        return payload.sub
+        return int(payload.sub)
     except JWTDecodeError:
         raise HTTPException(
             status_code=401,
@@ -47,7 +47,7 @@ async def get_optional_user_id(request: Request):
             request
         )
         payload = security.verify_token(access_token, verify_csrf=False)
-        return payload.sub
+        return int(payload.sub)
     except Exception:
         return None
 

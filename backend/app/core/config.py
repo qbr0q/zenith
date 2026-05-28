@@ -9,11 +9,11 @@ class DBConfig(BaseSettings):
     password: str
     host: str
     port: int
-    db: str
+    name: str
 
     @property
     def url(self):
-        return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
+        return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
 
 
 class AuthConfig(BaseModel):

@@ -1,1 +1,1 @@
-from .redis_worker import redis_db, start_redis_worker
+from .redis_worker import redis_db, start_redis_worker, lifespan
