@@ -6,11 +6,11 @@ from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.utils import get_session
+from app.router.post.shemas import PostSchema
 from app.router.utils import get_current_user_id, get_optional_user_id
 from app.router.post.utils import get_comment_branch, \
     attach_post_images, get_feed_posts, get_post_by_slug
 from app.database.models import Post
-from app.router.validate.response_shemas import PostSchema
 from app.websocket import sio
 
 
@@ -57,13 +57,13 @@ async def create_post(
         new_post = Post(text=text, user_id=user_id)
         session.add(new_post)
         await session.flush()
-        await attach_post_images(session, data, new_post.id, user_id)
-        await session.commit()
         await session.refresh(new_post)
+        await attach_post_images(session, data, new_post.id, user_id)
 
         post_json = json.loads(PostSchema.model_validate(new_post).model_dump_json())
         await sio.emit("new_post", post_json)
 
+        await session.commit()
         return {"status": "success"}
     except Exception as e:
         await session.rollback()
@@ -80,8 +80,9 @@ async def delete_post(
     ).filter(
         Post.id == post_id
     )
-    post = session.exec(statement).one()
+    record = await session.exec(statement)
+    post = record.one()
     post.deleted = True
-    session.commit()
+    await session.commit()
 
     await sio.emit("delete_post", {"post_id": post_id})

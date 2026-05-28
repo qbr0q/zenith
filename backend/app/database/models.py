@@ -108,10 +108,21 @@ class Comment(SQLModel, table=True):
     slug: str = Field(unique=True, index=True, default_factory=generate_short_slug)
     deleted: bool = Field(default=False)
 
-    post: Optional["Post"] = Relationship(back_populates="comments")
-    author: Optional["User"] = Relationship(back_populates="comments")
-    likes: List["CommentLike"] = Relationship(back_populates="comments")
-    image: List["CommentImage"] = Relationship(back_populates="comment")
+    post: Optional["Post"] = Relationship(
+        back_populates="comments",
+        sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    author: Optional["User"] = Relationship(
+        back_populates="comments"
+    )
+    likes: List["CommentLike"] = Relationship(
+        back_populates="comments",
+        sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    image: List["CommentImage"] = Relationship(
+        back_populates="comment",
+        sa_relationship_kwargs={"lazy": "selectin"}
+    )
 
 
 class CommentLike(SQLModel, table=True):
