@@ -5,7 +5,6 @@ import uvicorn
 
 from app.core import settings
 from app.router import routers
-from app.redis_queues import lifespan
 from app.websocket import run_socket
 
 
@@ -13,7 +12,6 @@ def get_configured_app(app):
     apply_config(app)
     include_handlers(app)
     run_socket(app)
-    app.lifespan = lifespan
     return app
 
 

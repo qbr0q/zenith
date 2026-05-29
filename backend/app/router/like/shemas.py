@@ -2,5 +2,6 @@ from pydantic import BaseModel
 
 
 class LikeRequest(BaseModel):
-    post_id: int
+    content_id: int
     type: str
+    action: str

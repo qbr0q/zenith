@@ -30,8 +30,9 @@ const Like = ({content, user}) => {
 
         try {
             await executeFetch('post', 'like', {
-                post_id: content?.id,
-                type: content.type
+                content_id: content?.id,
+                type: content.type,
+                action: isLiked ? "remove" : "add"
             })
         } catch (err) {
             console.error(err)

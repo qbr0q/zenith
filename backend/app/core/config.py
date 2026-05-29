@@ -29,8 +29,11 @@ class AuthConfig(BaseModel):
 class RedisConfig(BaseModel):
     host: str
     port: int
-    timeout: int
-    action_queue: str = "action_queue"
+    name: int
+
+    @property
+    def url(self):
+        return f"redis://{self.host}:{self.port}/{self.name}"
 
 
 class Config(BaseSettings):

@@ -2,8 +2,7 @@ from fastapi import FastAPI
 from app import run_server, get_configured_app
 
 
-from app.redis_queues import lifespan
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 get_configured_app(app)
 
 
