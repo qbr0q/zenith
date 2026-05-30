@@ -36,10 +36,21 @@ class RedisConfig(BaseModel):
         return f"redis://{self.host}:{self.port}/{self.name}"
 
 
+class PrivateConfig(BaseModel):
+    openrouter_api_key: str
+
+
+class BotSettings(BaseSettings):
+    mail: str
+    password: str
+
+
 class Config(BaseSettings):
     auth: AuthConfig
     db: DBConfig
     redis: RedisConfig
+    private: PrivateConfig
+    bot: BotSettings
 
     model_config = SettingsConfigDict(
         env_file=".env",

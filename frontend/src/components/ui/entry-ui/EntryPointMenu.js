@@ -19,7 +19,7 @@ const EntryPointMenu = ({content}) => {
 
         const config = {
             post: {
-                url: `posts/${content.id}/`
+                url: `post/${content.id}/`
             },
             comment: {
                 url: `comment/${content.id}/`

@@ -113,7 +113,8 @@ class Comment(SQLModel, table=True):
         sa_relationship_kwargs={"lazy": "selectin"}
     )
     author: Optional["User"] = Relationship(
-        back_populates="comments"
+        back_populates="comments",
+        sa_relationship_kwargs={"lazy": "selectin"}
     )
     likes: List["CommentLike"] = Relationship(
         back_populates="comments",

@@ -37,7 +37,7 @@ async def login(
     set_access_token(response, access_token)
     set_refresh_token(response, refresh_token)
 
-    response_user = get_response_user(user)
+    response_user = get_response_user(user, access_token)
 
     return response_user
 

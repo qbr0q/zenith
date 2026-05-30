@@ -48,12 +48,13 @@ def set_refresh_token(response: Response, token):
     )
 
 
-def get_response_user(user):
+def get_response_user(user, access_token):
     return {
         "id": user.id,
         "username": user.username,
         "info": {
             "is_verified": user.info.is_verified,
             "avatar_url": user.info.avatar_url
-        }
+        },
+        "access_token": access_token
     }

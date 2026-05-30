@@ -5,6 +5,7 @@ from sqlmodel import select
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.task_redis.tasks import process_ai_answer
 from app.database.utils import get_session
 from app.router.post.shemas import PostSchema
 from app.router.utils import get_current_user_id, get_optional_user_id
@@ -14,7 +15,7 @@ from app.database.models import Post
 from app.websocket import sio
 
 
-router = APIRouter(prefix="/posts", tags=["Post"])
+router = APIRouter(prefix="/post", tags=["Post"])
 
 
 @router.get("/", response_model=List[PostSchema])
@@ -64,6 +65,8 @@ async def create_post(
         await sio.emit("new_post", post_json)
 
         await session.commit()
+        if "@ZenithAi" in text:
+            await process_ai_answer.kiq(post_json)
         return {"status": "success"}
     except Exception as e:
         await session.rollback()
