@@ -29,9 +29,10 @@ const Like = ({content, user}) => {
         setIsLiked(!isLiked);
 
         try {
-            await executeFetch('post', 'social_action/like', {
-                post_id: content?.id,
-                type: content.type
+            await executeFetch('post', 'like', {
+                content_id: content?.id,
+                type: content.type,
+                action: isLiked ? "remove" : "add"
             })
         } catch (err) {
             console.error(err)

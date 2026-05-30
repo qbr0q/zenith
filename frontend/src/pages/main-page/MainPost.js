@@ -15,7 +15,7 @@ const MainPost = () => {
     const { data: posts, isLoading, error } = useQuery({
         queryKey: ['posts'],
         queryFn: async () => {
-            return await executeFetch('get', "posts/");
+            return await executeFetch('get', "post/");
         },
         // Данные не будут считаться "старыми" 5 минут, пока не прилетит сокет или мы не обновим вручную
         staleTime: 1000 * 60 * 5, 

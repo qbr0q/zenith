@@ -14,7 +14,7 @@ const CommentForm = ({content, onClose}) => {
                 formData.append("parent_id", parent_id);
             }
 
-            executeFetch('post', 'social_action/create_comment', formData)
+            executeFetch('post', 'comment', formData)
             onClose()
         } catch (error) {
             console.error(error);

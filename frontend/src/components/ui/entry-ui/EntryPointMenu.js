@@ -19,10 +19,10 @@ const EntryPointMenu = ({content}) => {
 
         const config = {
             post: {
-                url: `posts/${content.id}/`
+                url: `post/${content.id}/`
             },
             comment: {
-                url: `social_action/delete_comment/${content.id}/`
+                url: `comment/${content.id}/`
             }
         };
         const { url } = config[content.type];
