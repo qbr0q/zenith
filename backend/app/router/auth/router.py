@@ -76,7 +76,7 @@ async def sign_up(
         await session.rollback()
         raise HTTPException(500, str(e))
 
-    response_user = get_response_user(user)
+    response_user = get_response_user(user, access_token)
 
     return response_user
 
