@@ -5,14 +5,14 @@ from app.database.models import User
 from app.router.deps import security
 
 
-def find_user(session: Session, login_data: str):
+async def find_user(session: Session, login_data: str):
     statement = select(User).filter(
         or_(
             User.mail == login_data,
             User.username == login_data,
         )
     )
-    query = session.exec(statement)
+    query = await session.exec(statement)
     user = query.first()
 
     return user
@@ -48,12 +48,13 @@ def set_refresh_token(response: Response, token):
     )
 
 
-def get_response_user(user):
+def get_response_user(user, access_token):
     return {
         "id": user.id,
         "username": user.username,
         "info": {
             "is_verified": user.info.is_verified,
             "avatar_url": user.info.avatar_url
-        }
+        },
+        "access_token": access_token
     }

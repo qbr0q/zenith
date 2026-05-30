@@ -6,7 +6,7 @@ const PostPublisher = () => {
 
     const onSubmit = (formData) => {
         try {
-            executeFetch('post', "posts/", formData)
+            executeFetch('post', "post/", formData)
         } catch (error) {
             console.error(error);
         }

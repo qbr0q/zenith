@@ -1,14 +1,15 @@
 import uuid
-from sqlmodel import Session
-from app.database import engine
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.database import SessionLocal
 
 
-def get_session():
+async def get_session() -> AsyncSession:
     """
     Открывает сессию с бд
     :return: Session
     """
-    with Session(engine) as session:
+    async with SessionLocal() as session:
         yield session
 
 

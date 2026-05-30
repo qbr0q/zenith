@@ -26,7 +26,7 @@ def get_base_post_statement(user_id: int):
     return statement
 
 
-def get_feed_posts(session, user_id, limit=15):
+async def get_feed_posts(session, user_id, limit=15):
     subq = (
         select(Post.id)
         .filter(Post.deleted == False)
@@ -41,7 +41,8 @@ def get_feed_posts(session, user_id, limit=15):
         .order_by(Post.create_date.desc())
     )
 
-    posts = session.exec(statement).unique().all()
+    result = await session.exec(statement)
+    posts = result.unique().all()
     return posts
 
 

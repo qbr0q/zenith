@@ -9,11 +9,11 @@ class DBConfig(BaseSettings):
     password: str
     host: str
     port: int
-    db: str
+    name: str
 
     @property
     def url(self):
-        return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
+        return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
 
 
 class AuthConfig(BaseModel):
@@ -29,14 +29,28 @@ class AuthConfig(BaseModel):
 class RedisConfig(BaseModel):
     host: str
     port: int
-    timeout: int
-    action_queue: str = "action_queue"
+    name: int
+
+    @property
+    def url(self):
+        return f"redis://{self.host}:{self.port}/{self.name}"
+
+
+class PrivateConfig(BaseModel):
+    openrouter_api_key: str
+
+
+class BotSettings(BaseSettings):
+    mail: str
+    password: str
 
 
 class Config(BaseSettings):
     auth: AuthConfig
     db: DBConfig
     redis: RedisConfig
+    private: PrivateConfig
+    bot: BotSettings
 
     model_config = SettingsConfigDict(
         env_file=".env",
