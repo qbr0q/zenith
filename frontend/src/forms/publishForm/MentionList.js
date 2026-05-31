@@ -3,10 +3,9 @@ import UserAvatar from '../../components/ui/user/UserAvatar'
 
 export const MentionList = ({ users, onSelect, isOpen }) => {
     if (!isOpen) return null;
-    debugger
 
     return (
-        <div className="absolute bottom-full left-0 mb-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] z-50 overflow-hidden animate-in fade-in zoom-in duration-200">
+        <div className="absolute bottom-[85px] left-0 mb-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] z-[50] overflow-hidden animate-in fade-in zoom-in duration-200">
             <div className="px-4 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                 Упомянуть пользователя
             </div>

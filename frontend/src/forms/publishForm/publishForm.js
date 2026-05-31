@@ -2,6 +2,7 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import {useModal} from '../../hooks/modalProvider'
 import { FiImage } from "react-icons/fi";
 import { MentionList } from "./MentionList"
+import { TopicSelector } from "./TopicSelector"
 
 
 const config = {
@@ -23,6 +24,7 @@ export const PublishForm = ({type, onSubmit}) => {
     const [postText, setPostText] = useState('');
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [mentionOpen, setMentionOpen] = useState(false);
+    const [selectedTopics, setSelectedTopics] = useState([]);
     const textareaRef = useRef(null);
     const postPushBtn = useRef(null);
     const fileInputRef = useRef(null);
@@ -41,6 +43,9 @@ export const PublishForm = ({type, onSubmit}) => {
     const handlePostSubmit = useCallback(() => {
         const formData = new FormData();
         formData.append('text', postText);
+        selectedTopics.forEach(topic => {
+            formData.append('topic', topic.id);
+        });
         selectedFiles.forEach(fileObj => {
             formData.append('data', fileObj.file);
         });
@@ -113,14 +118,13 @@ export const PublishForm = ({type, onSubmit}) => {
                 return;
             }
             if (e.ctrlKey) {
-            debugger
                 if (isEnableData) {
                     e.preventDefault();
                     handlePostSubmit();
                 }
             }
         }
-    }, [mentionOpen, handlePostSubmit, handleSelectUser]);
+    }, [mentionOpen, handlePostSubmit, handleSelectUser, isEnableData]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
@@ -148,11 +152,15 @@ export const PublishForm = ({type, onSubmit}) => {
                 ))}
             </div>
         )}
-        <div className="relative w-full">
+        <div className="relative w-full z-10">
             <MentionList
                 users={users}
                 isOpen={mentionOpen}
                 onSelect={handleSelectUser}
+            />
+            <TopicSelector
+                selectedTopics={selectedTopics}
+                setSelectedTopics={setSelectedTopics}
             />
             <textarea
                 autoFocus

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 // \s - пробельный символ
 // (\S+) - захватывает один или более непробельных символов (само слово)
 const MENTION_REGEX = /(@\S+)|(#\S+)/g;
+const VALUE_REGEX = /[^a-zA-Z0-9]/g;
 
 const TextParser = ({ children }) => {
     if (!children) {return}
@@ -22,21 +23,14 @@ const TextParser = ({ children }) => {
 
         // a. Меншен (начинается с @)
         if (part.startsWith('@')) {
-            const username = part.substring(1); // Удаляем @
-            const mentionLink = `/@${username}`; // Ссылка на страницу пользователя
-
             return (
-                <a
+                <Link
                     key={index}
-                    href={mentionLink}
+                    to={`/search?query=${encodeURIComponent(clearValue(part))}`}
                     className="text-[blue]"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        alert(`Переход к пользователю: ${username}`);
-                    }}
                 >
                     {part}
-                </a>
+                </Link>
             );
         }
 
@@ -45,7 +39,7 @@ const TextParser = ({ children }) => {
             return (
                 <Link
                     key={index}
-                    to={`/search?query=${encodeURIComponent(part)}`}
+                    to={`/search?query=${encodeURIComponent(clearValue(part))}`}
                     className="text-[green]"
                 >
                     {part}
@@ -59,6 +53,16 @@ const TextParser = ({ children }) => {
 
     // 4. Оборачиваем все в основной тег <span>
     return <span>{renderedText}</span>;
+}
+
+const clearValue = (str) => {
+    if (!str) return '';
+
+    const firstChar = str[0];
+
+    const rest = str.slice(1).replace(/[^a-zA-Z0-9]/g, '');
+
+    return firstChar + rest;
 }
 
 export default TextParser;

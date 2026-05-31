@@ -39,6 +39,13 @@ class UserInfo(SQLModel, table=True):
     user: User = Relationship(back_populates="info")
 
 
+class PostTopicLink(SQLModel, table=True):
+    __tablename__ = "post_topic_link"
+
+    post_id: int = Field(foreign_key="post.id", primary_key=True)
+    topic_id: int = Field(default=None, foreign_key="rb_topic.id", primary_key=True)
+
+
 class Post(SQLModel, table=True):
     __tablename__ = "post"
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -63,6 +70,11 @@ class Post(SQLModel, table=True):
     )
     image: List["PostImage"] = Relationship(
         back_populates="post",
+        sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    topics: List["RbTopic"] = Relationship(
+        back_populates="post",
+        link_model=PostTopicLink,
         sa_relationship_kwargs={"lazy": "selectin"}
     )
 
@@ -150,3 +162,18 @@ class CommentImage(SQLModel, table=True):
     author_id: Optional[int] = Field(default=None, foreign_key="user_profile.id")
 
     comment: Optional["Comment"] = Relationship(back_populates="image")
+
+
+class RbTopic(SQLModel, table=True):
+    __tablename__ = "rb_topic"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    code: int
+    name: str = Field(unique=True, index=True)
+    slug: str = Field(unique=True)
+
+    post: List["Post"] = Relationship(
+        back_populates="topics",
+        link_model=PostTopicLink,
+        sa_relationship_kwargs={"lazy": "selectin"}
+    )

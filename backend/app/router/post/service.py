@@ -4,7 +4,7 @@ from sqlalchemy.orm import contains_eager
 
 from app.core import settings
 from app.database.models import Post, PostLike, \
-    Comment, PostImage
+    Comment, PostImage, PostTopicLink, RbTopic
 from app.task_redis.tasks import process_ai_answer
 from app.router.post.shemas import PostSchema
 from app.router.utils import _handle_upload
@@ -30,7 +30,7 @@ class PostManager:
         return statement
 
     @classmethod
-    async def get_raw_feed_posts(cls, session, user_id, limit, filter_by):
+    async def get_raw_feed_posts(cls, session, user_id, limit, filter_by_query, filter_by_topic):
         subq = (
             select(Post.id)
             .filter(Post.deleted == False)
@@ -45,9 +45,17 @@ class PostManager:
             .order_by(Post.create_date.desc())
         )
 
-        if filter_by:
+        if filter_by_query:
             statement = statement.where(
-                Post.text.ilike(f"%{filter_by}%")
+                Post.text.ilike(f"%{filter_by_query}%")
+            )
+
+        if filter_by_topic:
+            statement = (
+                statement
+                .join(PostTopicLink, Post.id == PostTopicLink.post_id)
+                .join(RbTopic, PostTopicLink.topic_id == RbTopic.id)
+                .where(RbTopic.slug == filter_by_topic)
             )
 
         result = await session.exec(statement)
@@ -55,10 +63,11 @@ class PostManager:
         return posts
 
     @classmethod
-    async def get_feed_posts(cls, session, user_id, limit=15, filter_by=None):
-        if not filter_by:
-            filter_by = {}
-        posts = await cls.get_raw_feed_posts(session, user_id, limit, filter_by)
+    async def get_feed_posts(cls, session, user_id, limit=15,
+                             filter_by_query=None, filter_by_topic=None):
+        posts = await cls.get_raw_feed_posts(
+            session, user_id, limit,
+            filter_by_query, filter_by_topic)
 
         result = []
         for post_obj, is_liked in posts:
@@ -106,10 +115,14 @@ class PostManager:
         return comment
 
     @classmethod
-    async def create_post(cls, session, user_id, text, data):
+    async def create_post(cls, session, user_id, text, data, topic: list[str]):
         new_post = Post(text=text, user_id=user_id)
         session.add(new_post)
         await session.flush()
+        if topic:
+            for t_id in topic:
+                link = PostTopicLink(post_id=new_post.id, topic_id=int(t_id))
+                session.add(link)
         await cls.attach_post_images(session, data, new_post.id, user_id)
         await session.refresh(new_post)
 

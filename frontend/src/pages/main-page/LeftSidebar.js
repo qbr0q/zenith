@@ -1,19 +1,16 @@
 import { FiGrid, FiTrendingUp } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { useReferenceBook } from '../../hooks/referenceBooks';
 
 
 const LeftSidebar = () => {
-  const topics = [
-    { name: 'Нейросети', count: '1.2k постов' },
-    { name: 'Политика', count: '1.2k постов' },
-    { name: 'IT и разработка', count: '850 постов' },
-    { name: 'Психология', count: '640 постов' },
-    { name: 'Дизайн', count: '420 постов' },
-  ];
+  const { data: topics, isLoading } = useReferenceBook('rbTopic');
 
   const hashtags = [
     '#javascript', '#webdev', '#reactjs', '#career', '#startup'
   ];
+
+  if (!!isLoading) {return}
 
   return (
     <div className="flex flex-col gap-7">
@@ -27,10 +24,13 @@ const LeftSidebar = () => {
         
         <div className="space-y-4">
           {topics.map((topic) => (
-            <div key={topic.name} className="group cursor-pointer">
-              <p className="font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">
+            <div key={topic.code} className="group cursor-pointer">
+              <Link
+                className="font-semibold text-gray-700 group-hover:text-blue-600 transition-colors"
+                to={`/search?topic=${topic.slug}`}
+              >
                 {topic.name}
-              </p>
+              </Link>
             </div>
           ))}
         </div>

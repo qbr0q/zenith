@@ -13,7 +13,7 @@ from .service import PostManager
 router = APIRouter(prefix="/post", tags=["Post"])
 
 
-@router.get("/", response_model=List[PostSchema])
+@router.get("", response_model=List[PostSchema])
 async def last_posts(
     user_id: int = Depends(get_optional_user_id),
     session: AsyncSession = Depends(get_session)
@@ -38,12 +38,13 @@ async def post_by_id(
 @router.post("/")
 async def create_post(
     text: Optional[str] = Form(None),
+    topic: List[str] = Form(None),
     data: List[UploadFile] = File(None),
     session: AsyncSession = Depends(get_session),
     user_id: int = Depends(get_current_user_id)
 ):
     try:
-        post = await PostManager.create_post(session, user_id, text, data)
+        post = await PostManager.create_post(session, user_id, text, data, topic)
         await sio.emit("new_post", post)
         return {"status": "success"}
     except Exception as e:
