@@ -8,7 +8,7 @@ export const useFetch = () => {
     const [loading, setLoading] = useState(false); 
     const [error, setError] = useState(null);
 
-    const executeFetch = useCallback( async (method, endpoint, data=null) => {
+    const executeFetch = useCallback( async (endpoint, method="get", data=null) => {
         setLoading(true);
         setError(null);
         
@@ -50,7 +50,7 @@ export const useFetch = () => {
                         setError(errorMessage);
                         throw new Error(errorMessage);
                     }
-                    return await executeFetch(method, endpoint, data);
+                    return await executeFetch(endpoint, method, data);
                 }
             }
 

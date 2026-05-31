@@ -9,7 +9,7 @@ from app.router.comment.shemas import CommentSchema
 class PostSchema(BaseModel):
     id: int
     create_date: datetime
-    text: str
+    text: str | None = None
     like_count: int
     type: str = "post"
     is_liked: bool = None

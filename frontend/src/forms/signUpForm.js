@@ -13,10 +13,10 @@ const SignUpForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         const postData = {mail: email, username: username, password: password}
         try {
-            const res = await executeFetch('post', 'auth/signup', postData)
+            const res = await executeFetch('auth/signup', 'post', postData)
             setUser(res)
         } catch (err) {
             console.error(err)
@@ -38,10 +38,10 @@ const SignUpForm = () => {
                         autocomplete="username"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="p-3 border w-[100%] border-gray-300 
+                        className="p-3 border w-[100%] border-gray-300
                             rounded-lg shadow-sm transition-all duration-200
-                            focus:border-[var(--color-primary-blue)] focus:ring-2 
-                            focus:ring-[var(--color-primary-blue)] focus:ring-opacity-50 
+                            focus:border-[var(--color-primary-blue)] focus:ring-2
+                            focus:ring-[var(--color-primary-blue)] focus:ring-opacity-50
                             focus:outline-none"
                     />
                 </span>
@@ -56,10 +56,10 @@ const SignUpForm = () => {
                         autocomplete="-"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="p-3 border w-[100%] border-gray-300 
+                        className="p-3 border w-[100%] border-gray-300
                             rounded-lg shadow-sm transition-all duration-200
-                            focus:border-[var(--color-primary-blue)] focus:ring-2 
-                            focus:ring-[var(--color-primary-blue)] focus:ring-opacity-50 
+                            focus:border-[var(--color-primary-blue)] focus:ring-2
+                            focus:ring-[var(--color-primary-blue)] focus:ring-opacity-50
                             focus:outline-none"
                     />
                 </span>
@@ -74,10 +74,10 @@ const SignUpForm = () => {
                         autocomplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="p-3 border w-[100%] border-gray-300 
+                        className="p-3 border w-[100%] border-gray-300
                             rounded-lg shadow-sm transition-all duration-200
-                            focus:border-[var(--color-primary-blue)] focus:ring-2 
-                            focus:ring-[var(--color-primary-blue)] focus:ring-opacity-50 
+                            focus:border-[var(--color-primary-blue)] focus:ring-2
+                            focus:ring-[var(--color-primary-blue)] focus:ring-opacity-50
                             focus:outline-none"
                     />
                 </span>
@@ -89,13 +89,13 @@ const SignUpForm = () => {
 
             <button
                 type="submit"
-                className="bg-[rgba(39,123,207,1)] text-white font-semibold 
+                className="bg-[rgba(39,123,207,1)] text-white font-semibold
                 py-3 px-8 rounded-full shadow-lg w-[70%] transition-all duration-200
                 ease-in-out hover:bg-[rgb(55,140,223)] hover:shadow-md mb-4"
             >
                 Зарегистрироваться
             </button>
-            
+
             <span
             className="text-sm text-[var(--color-primary-blue)] cursor-pointer p-0"
             onClick={openLoginForm}>

@@ -1,4 +1,4 @@
-import PublishForm from "../../../forms/publishForm";
+import { PublishForm } from "../../../forms/publishForm";
 import { useFetch } from "../../../hooks/fetch";
 
 
@@ -14,7 +14,7 @@ const CommentForm = ({content, onClose}) => {
                 formData.append("parent_id", parent_id);
             }
 
-            executeFetch('post', 'comment', formData)
+            executeFetch('comment', 'post', formData)
             onClose()
         } catch (error) {
             console.error(error);

@@ -15,7 +15,7 @@ function LoginForm() {
         
         const postData = {mail: email, password: password}
         try {
-            const res = await executeFetch('post', 'auth/login', postData)
+            const res = await executeFetch('auth/login', 'post', postData)
             setUser(res)
         } catch (err) {
             console.error(err)
