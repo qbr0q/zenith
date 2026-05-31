@@ -12,7 +12,7 @@ const Post = () => {
     const { data: post, isLoading, error } = useQuery({
         queryKey: ['post', postSlug],
         queryFn: async () => {
-            return await api("get", `post/${postSlug}/`);
+            return await api(`post/${postSlug}/`);
         },
         staleTime: 1000 * 60 * 5,
     });

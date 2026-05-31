@@ -9,7 +9,7 @@ from app.router.comment.shemas import CommentSchema
 class PostSchema(BaseModel):
     id: int
     create_date: datetime
-    text: str
+    text: str | None = None
     like_count: int
     type: str = "post"
     is_liked: bool = None
@@ -18,5 +18,14 @@ class PostSchema(BaseModel):
     author: AuthorSchema
     comments: List[CommentSchema] | None
     image: List[PostImageSchema] | None = []
+    topics: List["TopicSchema"] | None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TopicSchema(BaseModel):
+    code: int
+    name: str
+    slug: str
 
     model_config = ConfigDict(from_attributes=True)

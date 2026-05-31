@@ -4,6 +4,7 @@ import ContentAuthor from './ContentAuthor'
 import SocialActions from '../../social-action/SocialActions'
 import TextParser from '../parser/TextParser'
 import ImageParser from '../parser/ImageParser'
+import { TopicTag } from './TopicUi'
 
 
 const ContentContainer = ({ contentItems, isComment = false }) => {
@@ -41,6 +42,7 @@ const ContentItem = ({ item, isComment }) => {
             onClick={(e) => {openContent(e, item.slug)}}
         >
             <ContentAuthor content={item} />
+            <TopicTag item={item} />
             <TextParser children={item.text} />
             <ImageParser type={item.type} images={item.image} />
             <SocialActions content={item} />
