@@ -35,7 +35,7 @@ async def post_by_id(
         raise HTTPException(500, str(e))
 
 
-@router.post("/")
+@router.post("")
 async def create_post(
     text: Optional[str] = Form(None),
     topic: List[str] = Form(None),

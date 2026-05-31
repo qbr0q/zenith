@@ -79,6 +79,7 @@ services:
     environment:
       - TZ=Europe/Moscow
       - PYTHONUNBUFFERED=1
+      - TASKIQ_LOG_LEVEL=DEBUG
 #    container_name: taskiq_worker -- уникализация наименования контейнера
     command: taskiq worker app.task_redis.tk:broker
     depends_on:

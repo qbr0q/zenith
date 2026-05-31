@@ -22,4 +22,5 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY app/task_redis ./app/task_redis
 COPY app/core ./app/core
 COPY app/database ./app/database
+COPY app/service ./app/service
 COPY settings.yml ./settings.yml
