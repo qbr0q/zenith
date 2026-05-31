@@ -1,16 +1,16 @@
 import { FiGrid, FiTrendingUp } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { useReferenceBook } from '../../hooks/referenceBooks';
+
 
 const LeftSidebar = () => {
-  const topics = [
-    { name: 'Политика', count: '1.2k постов' },
-    { name: 'IT и разработка', count: '850 постов' },
-    { name: 'Психология', count: '640 постов' },
-    { name: 'Дизайн', count: '420 постов' },
-  ];
+  const { data: topics, isLoading } = useReferenceBook('rbTopic');
 
   const hashtags = [
     '#javascript', '#webdev', '#reactjs', '#career', '#startup'
   ];
+
+  if (!!isLoading) {return}
 
   return (
     <div className="flex flex-col gap-7">
@@ -24,18 +24,16 @@ const LeftSidebar = () => {
         
         <div className="space-y-4">
           {topics.map((topic) => (
-            <div key={topic.name} className="group cursor-pointer">
-              <p className="font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">
+            <div key={topic.code} className="group cursor-pointer">
+              <Link
+                className="font-semibold text-gray-700 group-hover:text-blue-600 transition-colors"
+                to={`/search?topic=${topic.slug}`}
+              >
                 {topic.name}
-              </p>
-              <p className="text-sm text-gray-400">{topic.count}</p>
+              </Link>
             </div>
           ))}
         </div>
-        
-        <button className="mt-5 text-sm text-blue-500 font-medium hover:underline">
-          Показать еще
-        </button>
       </div>
 
       {/* Блок 2: Популярные хэштеги */}
@@ -47,16 +45,16 @@ const LeftSidebar = () => {
         
         <div className="flex flex-wrap gap-2">
           {hashtags.map((tag) => (
-            <span 
-              key={tag} 
+            <Link
+              to={`/search?query=${encodeURIComponent(tag)}`}
+              key={tag}
               className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm font-medium hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition-all border border-transparent hover:border-blue-200"
             >
               {tag}
-            </span>
+            </Link>
           ))}
         </div>
       </div>
-
     </div>
   );
 };

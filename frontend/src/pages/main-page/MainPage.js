@@ -2,12 +2,10 @@ import MainLayout from "../MainLayout";
 import MainPost from './MainPost';
 
 
-const MainPage = () => {
+export const MainPage = () => {
     return (
         <MainLayout>
             <MainPost />
         </MainLayout>
     )
 }
-
-export default MainPage

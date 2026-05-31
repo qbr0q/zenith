@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useModal } from './modalProvider';
 import LoginForm from '../forms/loginForm'
 import SignUpForm from '../forms/signUpForm'
-import PublishForm from '../forms/publishForm'
+import { PublishForm } from '../forms/publishForm'
 import ConfirmForm from '../forms/confirmForm'
 
 

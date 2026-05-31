@@ -27,7 +27,7 @@ const EntryPointMenu = ({content}) => {
         };
         const { url } = config[content.type];
         try {
-            await executeFetch('delete', url)
+            await executeFetch(url, 'delete')
         } catch (err) {
             console.error(err)
         }
