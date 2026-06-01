@@ -54,7 +54,7 @@ export const PublishForm = ({type, onSubmit}) => {
         setSelectedFiles([]);
         setPostText("");
         handleCloseModal();
-    }, [postText, selectedFiles, onSubmit, handleCloseModal]);
+    }, [postText, selectedFiles, onSubmit, handleCloseModal, selectedTopics]);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -129,7 +129,7 @@ export const PublishForm = ({type, onSubmit}) => {
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [handleKeyDown])
+    }, [handleKeyDown, postText])
 
     return <div className="flex flex-col items-end">
         {selectedFiles.length > 0 && (
@@ -158,10 +158,10 @@ export const PublishForm = ({type, onSubmit}) => {
                 isOpen={mentionOpen}
                 onSelect={handleSelectUser}
             />
-            <TopicSelector
+            {type == 'post' && <TopicSelector
                 selectedTopics={selectedTopics}
                 setSelectedTopics={setSelectedTopics}
-            />
+            />}
             <textarea
                 autoFocus
                 ref={textareaRef}

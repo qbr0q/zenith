@@ -7,7 +7,7 @@ from app.database.utils import get_session
 from app.router.post.shemas import PostSchema
 from app.router.utils import get_current_user_id, get_optional_user_id
 from app.websocket import sio
-from .service import PostManager
+from .manager import PostManager
 
 
 router = APIRouter(prefix="/post", tags=["Post"])

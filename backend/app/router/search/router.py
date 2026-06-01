@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.utils import get_session
-from app.router.post.service import PostManager
+from app.router.post.manager import PostManager
 from app.router.utils import get_optional_user_id
 
 

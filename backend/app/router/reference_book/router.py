@@ -3,7 +3,7 @@ from sqlmodel import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.utils import get_session
-from app.router.utils import get_current_user_id
+from app.router.utils import get_optional_user_id
 from .mapper import rb_mapping
 from .enums import ReferenceBookName
 
@@ -14,8 +14,8 @@ router = APIRouter(prefix="/reference_book", tags=["ReferenceBook"])
 @router.get("/{rb_name}")
 async def load_reference_book(
         rb_name: ReferenceBookName,
-        user_id: int = Depends(get_current_user_id),
-        session: AsyncSession = Depends(get_session)
+        session: AsyncSession = Depends(get_session),
+        user_id: int = Depends(get_optional_user_id)
 ):
     rb_model = rb_mapping.get(rb_name)
 

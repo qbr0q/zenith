@@ -1,6 +1,6 @@
 from app.core import settings
-from app.database.models import CommentImage
 from app.router.utils import _handle_upload
+from .models import CommentImage
 
 
 async def attach_comment_images(session, files, author_id, comment_id):
