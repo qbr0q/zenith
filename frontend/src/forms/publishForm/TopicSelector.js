@@ -10,8 +10,9 @@ export const TopicSelector = ({ selectedTopics, setSelectedTopics }) => {
     if (!!isLoading) {return}
 
     const toggleTopic = (topic) => {
-        if (selectedTopics.includes(topic)) {
-            setSelectedTopics(selectedTopics.filter(t => t !== topic));
+        const isSelected = selectedTopics.some(t => t.code === topic.code);
+        if (isSelected) {
+            setSelectedTopics(selectedTopics.filter(t => t.code !== topic.code));
         } else {
             setSelectedTopics([...selectedTopics, topic]);
         }
