@@ -4,12 +4,10 @@ from authx.exceptions import JWTDecodeError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.router.auth.shemas import LoginRequest, SignUpRequest
-from app.router.auth.validate_form import validate_login, validate_signup
 from app.database.utils import get_session
-from app.database.models import User, UserInfo
 from app.router.deps import security
-from app.router.auth.utils import find_user, create_access_token, \
-    create_refresh_token, set_access_token, set_refresh_token, get_response_user
+from app.router.auth.service import create_access_token, set_access_token
+from .manager import AuthManager
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -21,24 +19,9 @@ async def login(
     response: Response,
     session: AsyncSession = Depends(get_session)
 ):
-    mail = data.mail
-    password = data.password
-
-    user = await find_user(session, mail)
-
-    err_code, err_detail = validate_login(user, mail, password)
-    if err_code and err_detail:
-        raise HTTPException(err_code, err_detail)
-
-    user_id = user.id
-    access_token = create_access_token(user_id)
-    refresh_token = create_refresh_token(user_id)
-
-    set_access_token(response, access_token)
-    set_refresh_token(response, refresh_token)
-
-    response_user = get_response_user(user, access_token)
-
+    response_user = await AuthManager.login(
+        session, response, data.mail, data.password
+    )
     return response_user
 
 
@@ -48,37 +31,14 @@ async def sign_up(
     response: Response,
     session: AsyncSession = Depends(get_session)
 ):
-    mail = data.mail
-    password = data.password
-    username = data.username
-
-    err_code, err_detail = validate_signup(mail, password, username)
-    if err_code and err_detail:
-        raise HTTPException(err_code, err_detail)
-
     try:
-        user = User(
-            mail=data.mail,
-            username=data.username,
-            password=data.password,
-            info=UserInfo()
+        response_user = await AuthManager.sign_up(
+            session, response, data.mail, data.password, data.username
         )
-        session.add(user)
-        await session.flush()
-
-        access_token = create_access_token(user.id)
-        refresh_token = create_refresh_token(user.id)
-
-        set_access_token(response, access_token)
-        set_refresh_token(response, refresh_token)
-        await session.commit()
+        return response_user
     except Exception as e:
         await session.rollback()
         raise HTTPException(500, str(e))
-
-    response_user = get_response_user(user, access_token)
-
-    return response_user
 
 
 @router.post("/refresh_token")

@@ -7,6 +7,7 @@ class AuthorSchema(BaseModel):
     username: str
     first_name: Optional[str] = None
     second_name: Optional[str] = None
+    role: str
 
     info: Optional["UserInfoSchema"] = None
 
