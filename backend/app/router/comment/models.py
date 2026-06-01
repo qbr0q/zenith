@@ -14,7 +14,7 @@ class Comment(SQLModel, table=True):
         sa_column=Column(Integer, ForeignKey("post.id", ondelete="CASCADE"))
     )
     author_id: Optional[int] = Field(default=None, foreign_key="user_profile.id")
-    text: str
+    text: str | None
     parent_id: int | None
     create_date: Optional[datetime] = Field(default_factory=datetime.now)
     like_count: int = Field(default=0)

@@ -7,7 +7,7 @@ from app.router.shemas import AuthorSchema, PostImageSchema, CommentLikeSchema
 
 class CommentSchema(BaseModel):
     id: int
-    text: str
+    text: str | None = None
     parent_id: int | None
     create_date: datetime
     like_count: int

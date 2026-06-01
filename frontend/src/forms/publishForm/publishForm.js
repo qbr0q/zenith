@@ -158,10 +158,10 @@ export const PublishForm = ({type, onSubmit}) => {
                 isOpen={mentionOpen}
                 onSelect={handleSelectUser}
             />
-            <TopicSelector
+            {type == 'post' && <TopicSelector
                 selectedTopics={selectedTopics}
                 setSelectedTopics={setSelectedTopics}
-            />
+            />}
             <textarea
                 autoFocus
                 ref={textareaRef}

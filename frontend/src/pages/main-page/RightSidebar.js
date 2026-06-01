@@ -1,6 +1,9 @@
 import { FiSettings, FiShield, FiBarChart2, FiBookmark, FiEdit3, FiTool } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { getUser } from '../../components/utils'
 
-export const ControlPanel = ({ isAdmin = true }) => {
+
+export const ControlPanel = () => {
   // Список кнопок (легко расширять)
   const menuItems = [
     { name: 'Мои черновики', icon: <FiEdit3 size={18} />, action: () => console.log('Drafts') },
@@ -8,6 +11,9 @@ export const ControlPanel = ({ isAdmin = true }) => {
     { name: 'Статистика', icon: <FiBarChart2 size={18} />, action: () => console.log('Stats') },
     { name: 'Настройки', icon: <FiSettings size={18} />, action: () => console.log('Settings') },
   ];
+  const user = getUser();
+  const isAdmin = user?.role === "admin"
+  debugger
 
   return (
     <div className="bg-white rounded-xl p-6 border">
@@ -31,10 +37,14 @@ export const ControlPanel = ({ isAdmin = true }) => {
         {/* Админка — показываем только если юзер админ */}
         {isAdmin && (
           <div className="mt-4 pt-4 border-t border-gray-100">
-            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-all text-sm font-bold">
+            <Link
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-all text-sm font-bold"
+                to='dashboard'
+                replace
+            >
               <FiShield size={18} />
               Администрирование
-            </button>
+            </Link>
           </div>
         )}
       </div>

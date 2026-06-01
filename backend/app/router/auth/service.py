@@ -56,5 +56,6 @@ def get_response_user(user, access_token):
             "is_verified": user.info.is_verified,
             "avatar_url": user.info.avatar_url
         },
-        "access_token": access_token
+        "access_token": access_token,
+        "role": user.role
     }

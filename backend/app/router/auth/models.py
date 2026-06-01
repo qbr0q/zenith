@@ -2,6 +2,7 @@ from sqlmodel import SQLModel, Field, Relationship
 from sqlalchemy import ForeignKey, Column, Integer
 from datetime import datetime
 from typing import Optional, List
+from .enums import UserRole
 
 
 class User(SQLModel, table=True):
@@ -13,6 +14,7 @@ class User(SQLModel, table=True):
     first_name: str = Field(nullable=True)
     second_name: str = Field(nullable=True)
     mail: str = Field(unique=True)
+    role: str = Field(default=UserRole.user, nullable=True)
 
     info: Optional["UserInfo"] = Relationship(
         back_populates="user",

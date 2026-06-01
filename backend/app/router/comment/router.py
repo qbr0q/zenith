@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter, HTTPException,\
     Depends, Form, UploadFile, File
 from sqlmodel import select, or_
-from typing import List
+from typing import Optional, List
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.utils import get_session
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/comment", tags=["Comment"])
 async def create_comment(
     parent_id: int | None = Form(default=None),
     post_id: int = Form(...),
-    text: str = Form(...),
+    text: Optional[str] = Form(None),
     data: List[UploadFile] = File(None),
     session: AsyncSession = Depends(get_session),
     user_id: int = Depends(get_current_user_id)
@@ -29,8 +29,8 @@ async def create_comment(
         new_comment = Comment(text=text, author_id=user_id, post_id=post_id, parent_id=parent_id)
         session.add(new_comment)
         await session.flush()
-        await session.refresh(new_comment)
         await attach_comment_images(session, data, user_id, new_comment.id)
+        await session.refresh(new_comment)
 
         comment_json = json.loads(CommentSchema.model_validate(new_comment).model_dump_json())
         await sio.emit("new_comment", comment_json)
