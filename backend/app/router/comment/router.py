@@ -5,12 +5,12 @@ from sqlmodel import select, or_
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.models import Comment
 from app.database.utils import get_session
+from app.router.comment.models import Comment
 from app.router.utils import get_current_user_id
 from app.router.comment.shemas import CommentSchema
-from app.router.comment.utils import attach_comment_images
 from app.websocket import sio
+from .service import attach_comment_images
 
 
 router = APIRouter(prefix="/comment", tags=["Comment"])
