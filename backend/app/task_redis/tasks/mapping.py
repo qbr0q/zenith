@@ -1,6 +1,6 @@
-from app.router.like.models import PostLike, CommentLike
-from app.router.post.models import Post
-from app.router.comment.models import Comment
+from app.database.models.like import PostLike, CommentLike
+from app.database.models.post import Post
+from app.database.models.comment import Comment
 
 
 model_mapping = {

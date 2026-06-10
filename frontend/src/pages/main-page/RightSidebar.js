@@ -13,7 +13,6 @@ export const ControlPanel = () => {
   ];
   const user = getUser();
   const isAdmin = user?.role === "admin"
-  debugger
 
   return (
     <div className="bg-white rounded-xl p-6 border">

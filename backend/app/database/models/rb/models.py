@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List
 
-from app.router.post.models import PostTopicLink
+from app.database.models.post.models import PostTopicLink
 
 
 class RbTopic(SQLModel, table=True):
