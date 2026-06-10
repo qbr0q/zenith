@@ -6,7 +6,7 @@ from typing import Optional, List
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.utils import get_session
-from app.router.comment.models import Comment
+from app.database.models.comment import Comment
 from app.router.utils import get_current_user_id
 from app.router.comment.shemas import CommentSchema
 from app.websocket import sio

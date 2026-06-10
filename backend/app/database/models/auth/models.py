@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, Field, Relationship
 from sqlalchemy import ForeignKey, Column, Integer
 from datetime import datetime
 from typing import Optional, List
-from .enums import UserRole
+from app.router.auth.enums import UserRole
 
 
 class User(SQLModel, table=True):

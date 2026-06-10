@@ -3,10 +3,10 @@ from sqlmodel import select, exists, and_
 from sqlalchemy.orm import contains_eager
 
 from app.core import settings
-from app.router.post.models import Post, PostTopicLink, PostImage
-from app.router.like.models import PostLike
-from app.router.comment.models import Comment
-from app.router.reference_book.models import RbTopic
+from app.database.models.post import Post, PostTopicLink, PostImage
+from app.database.models.like import PostLike
+from app.database.models.comment import Comment
+from app.database.models.rb import RbTopic
 from app.task_redis.tasks import process_ai_answer
 from app.router.post.shemas import PostSchema
 from app.router.utils import _handle_upload

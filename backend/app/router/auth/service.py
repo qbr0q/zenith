@@ -2,7 +2,7 @@ from fastapi import Response
 from sqlmodel import select, Session, or_
 
 from app.router.deps import security
-from .models import User
+from app.database.models.auth import User
 
 
 async def find_user(session: Session, login_data: str):
