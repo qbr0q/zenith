@@ -1,5 +1,5 @@
 from .enums import ReferenceBookName
-from app.database.models.rb import RbTopic
+from app.database.models import RbTopic
 
 
 rb_mapping = {

@@ -1,6 +1,5 @@
-from app.database.models.like import PostLike, CommentLike
-from app.database.models.post import Post
-from app.database.models.comment import Comment
+from app.database.models import PostLike, CommentLike, \
+    Post, Comment
 
 
 model_mapping = {
