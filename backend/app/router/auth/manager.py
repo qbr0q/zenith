@@ -2,7 +2,7 @@ from fastapi import HTTPException
 
 from app.router.auth.service import find_user, create_access_token, \
     create_refresh_token, set_access_token, set_refresh_token, get_response_user
-from app.database.models.auth import User, UserInfo
+from app.database.models import User, UserInfo
 
 
 class AuthManager:
