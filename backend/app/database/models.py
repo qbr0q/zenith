@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Optional, List
 
 from app.database.utils import generate_short_slug
-from app.router.auth.enums import UserRole
+from .enums import UserRole
 
 
 class User(SQLModel, table=True):
