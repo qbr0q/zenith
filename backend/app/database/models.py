@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Optional, List
 
 from app.database.utils import generate_short_slug
+from app.router.auth.enums import UserRole
 
 
 class User(SQLModel, table=True):
@@ -15,6 +16,7 @@ class User(SQLModel, table=True):
     first_name: str = Field(nullable=True)
     second_name: str = Field(nullable=True)
     mail: str = Field(unique=True)
+    role: str = Field(default=UserRole.user, nullable=True)
 
     info: Optional["UserInfo"] = Relationship(
         back_populates="user",
